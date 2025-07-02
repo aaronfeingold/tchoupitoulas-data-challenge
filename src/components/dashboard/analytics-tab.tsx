@@ -29,7 +29,7 @@ export function AnalyticsTab() {
         {/* Yearly Totals Chart */}
         <Card className="glass-effect">
           <CardHeader>
-            <CardTitle>📊 Yearly Totals</CardTitle>
+            <CardTitle> Yearly Totals</CardTitle>
             <CardDescription>
               Hall of Fame entries by calendar year
             </CardDescription>
@@ -45,7 +45,7 @@ export function AnalyticsTab() {
         {/* Monthly Trends Chart */}
         <Card className="glass-effect">
           <CardHeader>
-            <CardTitle>📈 Monthly Trends</CardTitle>
+            <CardTitle> Monthly Trends</CardTitle>
             <CardDescription>Month-by-month entry patterns</CardDescription>
           </CardHeader>
           <CardContent>
@@ -66,13 +66,20 @@ export function AnalyticsTab() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
-            • Date-in-month analysis
-            <br />
-            • Streak analysis charts
-            <br />
-            • Name frequency visualizations
-            <br />• Gap analysis timeline
+          <div className="flex items-center gap-8 md:gap-4 md:justify-center">
+            <div className="flex-shrink-0">
+              <img
+                src="/Tchoup-Data-128x128.png"
+                alt="Tchoup Data Logo"
+                className="w-32 h-32 object-contain"
+              />
+            </div>
+            <div className="text-center py-8 text-muted-foreground flex-1 md:flex-initial">
+              • Date-in-month analysis
+              <br />• Streak analysis charts
+              <br />• Gap analysis timeline
+              <br />• Name frequency visualizations
+            </div>
           </div>
         </CardContent>
       </Card>
