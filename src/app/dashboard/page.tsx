@@ -51,7 +51,7 @@ export default function DashboardPage() {
               className="object-contain"
               unoptimized
             />
-            <p className="text-lg font-medium text-muted-foreground animate-pulse">
+            <p className="text-sm md:text-lg font-medium text-muted-foreground animate-pulse">
               Refreshing your sweet and tasty dashboard...
             </p>
           </div>
