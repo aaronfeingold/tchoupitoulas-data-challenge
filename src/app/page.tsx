@@ -58,9 +58,14 @@ export default function Home() {
         <div className="container mx-auto px-4 py-16">
           {/* Hero Section */}
           <div className="text-center mb-16">
-            <h1 className="text-6xl font-bold text-gradient mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gradient mb-6 leading-tight">
               Tchoupitoulas Data Challenge
             </h1>
+            <img
+              src="/Tchoup-Data-128x128.png"
+              alt="Tchoup Data"
+              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto object-contain mb-6"
+            />
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Welcome to the sweetest data analysis experience! Explore our Hall
               of Fame entries with beautiful visualizations and interactive
@@ -129,6 +134,15 @@ export default function Home() {
                 </CardDescription>
               </CardContent>
             </Card>
+          </div>
+
+          {/* Tchoup Data Image Section */}
+          <div className="text-center mb-16">
+            <img
+              src="/Tchoup-Data-128x128.png"
+              alt="Tchoup Data"
+              className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto object-contain hover-lift"
+            />
           </div>
 
           {/* Call to Action */}
