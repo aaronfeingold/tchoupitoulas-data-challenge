@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     siteName: "Tchoupitoulas Data Challenge",
     images: [
       {
-        url: "/favicon.ico",
+        url: "/Tchoup-Data-128x128.png",
         width: 128,
         height: 128,
         alt: "Tchoupitoulas Data Challenge - A fun and interactive data analysis application for exploring hall of fame entries",
@@ -35,22 +35,22 @@ export const metadata: Metadata = {
     title: "Tchoupitoulas Data Challenge",
     description:
       "A fun and interactive data analysis application for exploring hall of fame entries",
-    images: ["/favicon.ico"],
+    images: ["/Tchoup-Data-128x128.png"],
   },
   icons: [
     {
       rel: "icon",
       type: "image/png",
       sizes: "128x128",
-      url: "/favicon.ico",
+      url: "/Tchoup-Data-128x128.png",
     },
     {
       rel: "shortcut icon",
-      url: "/favicon.ico",
+      url: "/Tchoup-Data-128x128.png",
     },
     {
       rel: "apple-touch-icon",
-      url: "/favicon.ico",
+      url: "/Tchoup-Data-128x128.png",
     },
   ],
 };
