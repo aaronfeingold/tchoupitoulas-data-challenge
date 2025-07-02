@@ -66,7 +66,7 @@ export function DataTableTab() {
 
   // State for column widths (in pixels)
   const [columnWidths, setColumnWidths] = useState({
-    participantNumber: 140,
+    participantNumber: 80, // Just wide enough for 5 digits
     name: 280, // Wider for long names
     parsedDate: 160,
   });
@@ -312,14 +312,22 @@ export function DataTableTab() {
                 setCurrentPage(1);
               }}
             >
-              <SelectTrigger className="w-32">
-                <SelectValue />
+              <SelectTrigger className="w-32 text-xs sm:text-sm">
+                <SelectValue className="text-xs sm:text-sm" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="20">20 per page</SelectItem>
-                <SelectItem value="50">50 per page</SelectItem>
-                <SelectItem value="100">100 per page</SelectItem>
-                <SelectItem value="all">Show all</SelectItem>
+                <SelectItem value="20" className="text-xs sm:text-sm">
+                  20 per page
+                </SelectItem>
+                <SelectItem value="50" className="text-xs sm:text-sm">
+                  50 per page
+                </SelectItem>
+                <SelectItem value="100" className="text-xs sm:text-sm">
+                  100 per page
+                </SelectItem>
+                <SelectItem value="all" className="text-xs sm:text-sm">
+                  Show all
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -327,18 +335,6 @@ export function DataTableTab() {
 
         {/* Column Filters */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-          <div className="relative">
-            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
-            <Input
-              placeholder="Filter participant #..."
-              value={columnFilters.participantNumber}
-              onChange={(e) =>
-                handleColumnFilterChange("participantNumber", e.target.value)
-              }
-              className="pl-8 text-xs"
-              size={1}
-            />
-          </div>
           <div className="relative">
             <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
             <Input
@@ -367,9 +363,7 @@ export function DataTableTab() {
             <Table ref={tableRef} className="table-fixed">
               <TableHeader>
                 <TableRow>
-                  <SortableHeader column="participantNumber">
-                    Participant #
-                  </SortableHeader>
+                  <SortableHeader column="participantNumber">ID</SortableHeader>
                   <SortableHeader column="name">Name</SortableHeader>
                   <SortableHeader column="parsedDate">
                     Parsed Date
