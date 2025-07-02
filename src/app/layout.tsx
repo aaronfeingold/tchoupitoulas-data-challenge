@@ -13,6 +13,46 @@ export const metadata: Metadata = {
   description:
     "A fun and interactive data analysis application for exploring hall of fame entries",
   keywords: ["data analysis", "dashboard", "ice cream", "hall of fame"],
+  openGraph: {
+    title: "Tchoupitoulas Data Challenge",
+    description:
+      "A fun and interactive data analysis application for exploring hall of fame entries",
+    url: "https://tchoupitoulas-data-challenge.vercel.app",
+    siteName: "Tchoupitoulas Data Challenge",
+    images: [
+      {
+        url: "/favicon.ico",
+        width: 128,
+        height: 128,
+        alt: "Tchoupitoulas Data Challenge - A fun and interactive data analysis application for exploring hall of fame entries",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tchoupitoulas Data Challenge",
+    description:
+      "A fun and interactive data analysis application for exploring hall of fame entries",
+    images: ["/favicon.ico"],
+  },
+  icons: [
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "128x128",
+      url: "/favicon.ico",
+    },
+    {
+      rel: "shortcut icon",
+      url: "/favicon.ico",
+    },
+    {
+      rel: "apple-touch-icon",
+      url: "/favicon.ico",
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -22,6 +62,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" type="image/png" />
+      </head>
       <body className={`${poppins.className} antialiased`}>
         <QueryProvider>{children}</QueryProvider>
       </body>
