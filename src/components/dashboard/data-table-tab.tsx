@@ -2,6 +2,15 @@
 
 import { useQuery } from "@tanstack/react-query";
 import {
+  Trophy,
+  Search,
+  ChevronUp,
+  ChevronDown,
+  Filter,
+  GripVertical,
+} from "lucide-react";
+import { useState, useMemo, useEffect, useRef } from "react";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -17,8 +26,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { getAllEntries } from "@/lib/actions";
 import { formatDate } from "@/lib/utils";
+import { HallOfFameEntry } from "@/lib/schema";
+
+type SortColumn = keyof HallOfFameEntry | null;
+type SortDirection = "asc" | "desc";
 
 export function DataTableTab() {
   const { data: entriesData, isLoading } = useQuery({
@@ -26,71 +48,494 @@ export function DataTableTab() {
     queryFn: getAllEntries,
   });
 
+  // State for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+
+  // State for sorting
+  const [sortColumn, setSortColumn] = useState<SortColumn>("parsedDate");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+
+  // State for filtering
+  const [globalSearch, setGlobalSearch] = useState("");
+  const [columnFilters, setColumnFilters] = useState({
+    participantNumber: "",
+    name: "",
+    parsedDate: "",
+  });
+
+  // State for column widths (in pixels)
+  const [columnWidths, setColumnWidths] = useState({
+    participantNumber: 140,
+    name: 280, // Wider for long names
+    parsedDate: 160,
+  });
+
+  // Refs for resize functionality
+  const tableRef = useRef<HTMLTableElement>(null);
+  const isResizing = useRef<string | null>(null);
+  const startX = useRef(0);
+  const startWidth = useRef(0);
+
   const entries = entriesData?.success ? entriesData.data || [] : [];
+
+  // Filtered and sorted data
+  const filteredAndSortedEntries = useMemo(() => {
+    let filteredEntries = [...entries];
+
+    // Apply global search
+    if (globalSearch) {
+      filteredEntries = filteredEntries.filter((entry) =>
+        Object.values(entry).some((value) =>
+          value?.toString().toLowerCase().includes(globalSearch.toLowerCase())
+        )
+      );
+    }
+
+    // Apply column filters
+    if (columnFilters.participantNumber) {
+      filteredEntries = filteredEntries.filter((entry) =>
+        entry.participantNumber
+          .toString()
+          .includes(columnFilters.participantNumber)
+      );
+    }
+    if (columnFilters.name) {
+      filteredEntries = filteredEntries.filter((entry) =>
+        entry.name.toLowerCase().includes(columnFilters.name.toLowerCase())
+      );
+    }
+
+    if (columnFilters.parsedDate) {
+      filteredEntries = filteredEntries.filter((entry) =>
+        formatDate(entry.parsedDate)
+          .toLowerCase()
+          .includes(columnFilters.parsedDate.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    if (sortColumn) {
+      filteredEntries.sort((a, b) => {
+        let aValue: any = a[sortColumn];
+        let bValue: any = b[sortColumn];
+
+        // Handle null values
+        if (aValue == null && bValue == null) return 0;
+        if (aValue == null) return sortDirection === "asc" ? -1 : 1;
+        if (bValue == null) return sortDirection === "asc" ? 1 : -1;
+
+        // Handle date sorting
+        if (sortColumn === "parsedDate") {
+          aValue = new Date(aValue as string).getTime();
+          bValue = new Date(bValue as string).getTime();
+        }
+
+        // Handle string sorting
+        if (typeof aValue === "string" && typeof bValue === "string") {
+          aValue = aValue.toLowerCase();
+          bValue = bValue.toLowerCase();
+        }
+
+        if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
+        if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return filteredEntries;
+  }, [entries, globalSearch, columnFilters, sortColumn, sortDirection]);
+
+  // Paginated data
+  const totalPages = Math.ceil(filteredAndSortedEntries.length / pageSize);
+  const paginatedEntries = useMemo(() => {
+    if (pageSize === filteredAndSortedEntries.length) {
+      return filteredAndSortedEntries; // Show all
+    }
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    return filteredAndSortedEntries.slice(start, end);
+  }, [filteredAndSortedEntries, currentPage, pageSize]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [globalSearch, columnFilters]);
+
+  const handleSort = (column: SortColumn) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
+  const handleColumnFilterChange = (column: string, value: string) => {
+    setColumnFilters((prev) => ({ ...prev, [column]: value }));
+    setCurrentPage(1);
+  };
+
+  // Resize handlers
+  const handleMouseDown = (
+    column: keyof typeof columnWidths,
+    e: React.MouseEvent
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    isResizing.current = column;
+    startX.current = e.clientX;
+    startWidth.current = columnWidths[column];
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isResizing.current) return;
+
+    const diff = e.clientX - startX.current;
+    const newWidth = Math.max(80, startWidth.current + diff); // Minimum width of 80px
+
+    setColumnWidths((prev) => ({
+      ...prev,
+      [isResizing.current!]: newWidth,
+    }));
+  };
+
+  const handleMouseUp = () => {
+    isResizing.current = null;
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
+  const SortableHeader = ({
+    column,
+    children,
+  }: {
+    column: SortColumn;
+    children: React.ReactNode;
+  }) => (
+    <TableHead
+      className="cursor-pointer select-none relative border-r border-border/50"
+      onClick={() => handleSort(column)}
+      style={{
+        width: column
+          ? columnWidths[column as keyof typeof columnWidths]
+          : "auto",
+        minWidth: column
+          ? columnWidths[column as keyof typeof columnWidths]
+          : "auto",
+        maxWidth: column
+          ? columnWidths[column as keyof typeof columnWidths]
+          : "auto",
+      }}
+    >
+      <div className="flex items-center gap-1 pr-2">
+        {children}
+        <div className="flex flex-col">
+          <ChevronUp
+            className={`h-3 w-3 ${
+              sortColumn === column && sortDirection === "asc"
+                ? "text-primary"
+                : "text-muted-foreground"
+            }`}
+          />
+          <ChevronDown
+            className={`h-3 w-3 -mt-1 ${
+              sortColumn === column && sortDirection === "desc"
+                ? "text-primary"
+                : "text-muted-foreground"
+            }`}
+          />
+        </div>
+      </div>
+      {column && (
+        <div
+          className="absolute right-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-primary/20 flex items-center justify-center group"
+          onMouseDown={(e) =>
+            handleMouseDown(column as keyof typeof columnWidths, e)
+          }
+        >
+          <GripVertical className="h-3 w-3 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+        </div>
+      )}
+    </TableHead>
+  );
 
   return (
     <Card className="glass-effect">
       <CardHeader>
-        <CardTitle>📋 Hall of Fame Entries</CardTitle>
+        <CardTitle className="flex items-center">
+          <Trophy className="h-4 w-4 mr-2 flex-shrink-0" /> Hall of Fame Entries
+        </CardTitle>
         <CardDescription>
-          Complete dataset of all hall of fame entries ({entries.length} total)
+          Complete dataset of all hall of fame entries (
+          {filteredAndSortedEntries.length} of {entries.length} total)
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Participant #</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Date String</TableHead>
-                <TableHead>Parsed Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? (
-                [...Array(10)].map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell>
-                      <div className="animate-pulse bg-muted h-4 rounded"></div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="animate-pulse bg-muted h-4 rounded"></div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="animate-pulse bg-muted h-4 rounded"></div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="animate-pulse bg-muted h-4 rounded"></div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : entries.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    className="text-center py-8 text-muted-foreground"
-                  >
-                    No entries found.
-                  </TableCell>
-                </TableRow>
-              ) : (
-                entries.map((entry) => (
-                  <TableRow key={entry.id}>
-                    <TableCell>
-                      <Badge variant="outline">{entry.participantNumber}</Badge>
-                    </TableCell>
-                    <TableCell className="font-medium">{entry.name}</TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {entry.dateStr}
-                    </TableCell>
-                    <TableCell>{formatDate(entry.parsedDate)}</TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+      <CardContent className="space-y-4">
+        {/* Search and Controls */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search all columns..."
+                value={globalSearch}
+                onChange={(e) => setGlobalSearch(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Select
+              value={pageSize.toString()}
+              onValueChange={(value) => {
+                const newPageSize =
+                  value === "all"
+                    ? filteredAndSortedEntries.length
+                    : parseInt(value);
+                setPageSize(newPageSize);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger className="w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="20">20 per page</SelectItem>
+                <SelectItem value="50">50 per page</SelectItem>
+                <SelectItem value="100">100 per page</SelectItem>
+                <SelectItem value="all">Show all</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
+
+        {/* Column Filters */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+            <Input
+              placeholder="Filter participant #..."
+              value={columnFilters.participantNumber}
+              onChange={(e) =>
+                handleColumnFilterChange("participantNumber", e.target.value)
+              }
+              className="pl-8 text-xs"
+              size={1}
+            />
+          </div>
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+            <Input
+              placeholder="Filter name..."
+              value={columnFilters.name}
+              onChange={(e) => handleColumnFilterChange("name", e.target.value)}
+              className="pl-8 text-xs"
+            />
+          </div>
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+            <Input
+              placeholder="Filter parsed date..."
+              value={columnFilters.parsedDate}
+              onChange={(e) =>
+                handleColumnFilterChange("parsedDate", e.target.value)
+              }
+              className="pl-8 text-xs"
+            />
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="rounded-md border overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table ref={tableRef} className="table-fixed">
+              <TableHeader>
+                <TableRow>
+                  <SortableHeader column="participantNumber">
+                    Participant #
+                  </SortableHeader>
+                  <SortableHeader column="name">Name</SortableHeader>
+                  <SortableHeader column="parsedDate">
+                    Parsed Date
+                  </SortableHeader>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  [...Array(10)].map((_, i) => (
+                    <TableRow key={i}>
+                      <TableCell
+                        style={{
+                          width: columnWidths.participantNumber,
+                          minWidth: columnWidths.participantNumber,
+                          maxWidth: columnWidths.participantNumber,
+                        }}
+                        className="border-r border-border/50"
+                      >
+                        <div className="animate-pulse bg-muted h-4 rounded"></div>
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.name,
+                          minWidth: columnWidths.name,
+                          maxWidth: columnWidths.name,
+                        }}
+                        className="border-r border-border/50"
+                      >
+                        <div className="animate-pulse bg-muted h-4 rounded"></div>
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.parsedDate,
+                          minWidth: columnWidths.parsedDate,
+                          maxWidth: columnWidths.parsedDate,
+                        }}
+                      >
+                        <div className="animate-pulse bg-muted h-4 rounded"></div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : paginatedEntries.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={3}
+                      className="text-center py-8 text-muted-foreground"
+                    >
+                      No entries found.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  paginatedEntries.map((entry) => (
+                    <TableRow key={entry.id}>
+                      <TableCell
+                        style={{
+                          width: columnWidths.participantNumber,
+                          minWidth: columnWidths.participantNumber,
+                          maxWidth: columnWidths.participantNumber,
+                        }}
+                        className="border-r border-border/50"
+                      >
+                        <Badge variant="outline">
+                          {entry.participantNumber}
+                        </Badge>
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.name,
+                          minWidth: columnWidths.name,
+                          maxWidth: columnWidths.name,
+                        }}
+                        className="font-medium border-r border-border/50 truncate"
+                        title={entry.name}
+                      >
+                        {entry.name}
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.parsedDate,
+                          minWidth: columnWidths.parsedDate,
+                          maxWidth: columnWidths.parsedDate,
+                        }}
+                      >
+                        {formatDate(entry.parsedDate)}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
+        {/* Pagination */}
+        {pageSize < filteredAndSortedEntries.length && (
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="text-xs sm:text-sm md:text-base text-muted-foreground text-center sm:text-left">
+              <span className="hidden sm:inline">
+                Showing{" "}
+                {Math.min(
+                  (currentPage - 1) * pageSize + 1,
+                  filteredAndSortedEntries.length
+                )}{" "}
+                to{" "}
+                {Math.min(
+                  currentPage * pageSize,
+                  filteredAndSortedEntries.length
+                )}{" "}
+                of {filteredAndSortedEntries.length} entries
+              </span>
+              <span className="sm:hidden">
+                {currentPage} of {totalPages}
+              </span>
+            </div>
+            <div className="flex items-center justify-center gap-1 sm:gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                disabled={currentPage === 1}
+                className="text-xs sm:text-sm px-2 sm:px-3 h-7 sm:h-8"
+              >
+                <span className="hidden sm:inline">Previous</span>
+                <span className="sm:hidden">Prev</span>
+              </Button>
+              <div className="flex items-center gap-0.5 sm:gap-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+
+                  return (
+                    <Button
+                      key={pageNum}
+                      variant={currentPage === pageNum ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCurrentPage(pageNum)}
+                      className="w-6 h-6 sm:w-8 sm:h-8 p-0 text-xs sm:text-sm"
+                    >
+                      {pageNum}
+                    </Button>
+                  );
+                })}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  setCurrentPage(Math.min(totalPages, currentPage + 1))
+                }
+                disabled={currentPage === totalPages}
+                className="text-xs sm:text-sm px-2 sm:px-3 h-7 sm:h-8"
+              >
+                <span className="hidden sm:inline">Next</span>
+                <span className="sm:hidden">Next</span>
+              </Button>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
