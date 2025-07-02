@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -68,9 +69,11 @@ export function AnalyticsTab() {
         <CardContent>
           <div className="flex items-center gap-8 md:gap-4 md:justify-center">
             <div className="flex-shrink-0">
-              <img
+              <Image
                 src="/Tchoup-Data-128x128.png"
                 alt="Tchoup Data Logo"
+                width={128}
+                height={128}
                 className="w-32 h-32 object-contain"
               />
             </div>

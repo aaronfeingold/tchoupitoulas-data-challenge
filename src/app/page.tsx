@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -42,9 +43,11 @@ export default function Home() {
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
           <div className="flex flex-col items-center space-y-4">
-            <img
+            <Image
               src="/loading.gif"
               alt="Loading..."
+              width={128}
+              height={128}
               className="w-32 h-32 object-contain"
             />
             <p className="text-lg font-medium text-muted-foreground animate-pulse">
@@ -61,9 +64,11 @@ export default function Home() {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gradient mb-6 leading-tight">
               Tchoupitoulas Data Challenge
             </h1>
-            <img
+            <Image
               src="/Tchoup-Data-128x128.png"
               alt="Tchoup Data"
+              width={128}
+              height={128}
               className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto object-contain mb-6"
             />
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -138,9 +143,11 @@ export default function Home() {
 
           {/* Tchoup Data Image Section */}
           <div className="text-center mb-16">
-            <img
+            <Image
               src="/Tchoup-Data-128x128.png"
               alt="Tchoup Data"
+              width={128}
+              height={128}
               className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto object-contain hover-lift"
             />
           </div>

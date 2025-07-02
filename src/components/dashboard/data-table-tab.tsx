@@ -9,7 +9,7 @@ import {
   Filter,
   GripVertical,
 } from "lucide-react";
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import {
   Card,
   CardContent,
@@ -77,7 +77,10 @@ export function DataTableTab() {
   const startX = useRef(0);
   const startWidth = useRef(0);
 
-  const entries = entriesData?.success ? entriesData.data || [] : [];
+  // Wrap entries derivation in useMemo to fix react-hooks/exhaustive-deps warning
+  const entries = useMemo(() => {
+    return entriesData?.success ? entriesData.data || [] : [];
+  }, [entriesData]);
 
   // Filtered and sorted data
   const filteredAndSortedEntries = useMemo(() => {
@@ -117,8 +120,9 @@ export function DataTableTab() {
     // Apply sorting
     if (sortColumn) {
       filteredEntries.sort((a, b) => {
-        let aValue: any = a[sortColumn];
-        let bValue: any = b[sortColumn];
+        // Replace 'any' types with proper union types
+        let aValue: string | number | Date | null = a[sortColumn];
+        let bValue: string | number | Date | null = b[sortColumn];
 
         // Handle null values
         if (aValue == null && bValue == null) return 0;
@@ -177,6 +181,26 @@ export function DataTableTab() {
   };
 
   // Resize handlers
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isResizing.current) return;
+
+    const diff = e.clientX - startX.current;
+    const newWidth = Math.max(80, startWidth.current + diff); // Minimum width of 80px
+
+    setColumnWidths((prev) => ({
+      ...prev,
+      [isResizing.current!]: newWidth,
+    }));
+  }, []);
+
+  const handleMouseUp = useCallback(() => {
+    isResizing.current = null;
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
+  }, [handleMouseMove]);
+
   const handleMouseDown = (
     column: keyof typeof columnWidths,
     e: React.MouseEvent
@@ -193,33 +217,13 @@ export function DataTableTab() {
     document.body.style.userSelect = "none";
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isResizing.current) return;
-
-    const diff = e.clientX - startX.current;
-    const newWidth = Math.max(80, startWidth.current + diff); // Minimum width of 80px
-
-    setColumnWidths((prev) => ({
-      ...prev,
-      [isResizing.current!]: newWidth,
-    }));
-  };
-
-  const handleMouseUp = () => {
-    isResizing.current = null;
-    document.removeEventListener("mousemove", handleMouseMove);
-    document.removeEventListener("mouseup", handleMouseUp);
-    document.body.style.cursor = "";
-    document.body.style.userSelect = "";
-  };
-
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+  }, [handleMouseMove, handleMouseUp]);
 
   const SortableHeader = ({
     column,

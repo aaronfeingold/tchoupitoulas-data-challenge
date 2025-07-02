@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { OverviewTab } from "@/components/dashboard/overview-tab";
 import { DataTableTab } from "@/components/dashboard/data-table-tab";
@@ -10,7 +10,6 @@ import { BarChart3, Table, TrendingUp } from "lucide-react";
 
 export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     // Check if this is a page refresh (not a navigation)
@@ -38,32 +37,19 @@ export default function DashboardPage() {
     }
   }, []);
 
-  // Listen for navigation events to set the flag
-  useEffect(() => {
-    const handleRouteChangeStart = () => {
-      // Set a flag that we're navigating to dashboard
-      sessionStorage.setItem("dashboard-navigation", "true");
-    };
-
-    // This effect runs when the component mounts due to navigation
-    // If we got here via router.push(), the flag should be set
-    router.prefetch = router.prefetch; // Access router to ensure it's ready
-
-    return () => {
-      // Cleanup
-    };
-  }, [router]);
-
   return (
     <>
       {/* Loading Overlay - same as home page */}
       {isLoading && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
           <div className="flex flex-col items-center space-y-4">
-            <img
+            <Image
               src="/loading.gif"
               alt="Loading..."
-              className="w-32 h-32 object-contain"
+              width={128}
+              height={128}
+              className="object-contain"
+              unoptimized
             />
             <p className="text-lg font-medium text-muted-foreground animate-pulse">
               Refreshing your sweet and tasty dashboard...
