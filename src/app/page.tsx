@@ -50,7 +50,7 @@ export default function Home() {
               height={128}
               className="w-32 h-32 object-contain"
             />
-            <p className="text-lg font-medium text-muted-foreground animate-pulse">
+            <p className="text-sm md:text-lg font-medium text-muted-foreground animate-pulse">
               Preparing your sweet and tasty dashboard...
             </p>
           </div>
