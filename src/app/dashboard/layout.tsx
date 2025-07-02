@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { IceCream } from "lucide-react";
 
 export default function DashboardLayout({
   children,
@@ -11,11 +12,12 @@ export default function DashboardLayout({
         <header className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold text-gradient mb-2">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gradient mb-3 leading-tight">
                 Tchoupitoulas Data Challenge
               </h1>
-              <p className="text-muted-foreground text-lg">
-                🍦 Sweet insights from our Hall of Fame entries
+              <p className="text-muted-foreground text-lg md:text-xl lg:text-2xl flex items-center">
+                <IceCream className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6 mr-2 flex-shrink-0" />
+                Sweet insights from our Hall of Fame entries
               </p>
             </div>
           </div>
