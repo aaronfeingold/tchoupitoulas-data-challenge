@@ -16,9 +16,21 @@ import {
   getLongestStreak,
 } from "@/lib/actions";
 import { formatDate, formatNumber } from "@/lib/utils";
-import { CalendarDays, Users, TrendingUp, Clock } from "lucide-react";
+import {
+  CalendarDays,
+  Calendar,
+  Trophy,
+  Users,
+  TrendingUp,
+  Clock,
+  ChevronDown,
+} from "lucide-react";
+import { useState } from "react";
+import { differenceInDays } from "date-fns";
 
 export function OverviewTab() {
+  const [isNamesExpanded, setIsNamesExpanded] = useState(false);
+
   const { data: entriesData, isLoading: entriesLoading } = useQuery({
     queryKey: ["all-entries"],
     queryFn: getAllEntries,
@@ -124,11 +136,15 @@ export function OverviewTab() {
       {dateRange && (
         <Card className="glass-effect">
           <CardHeader>
-            <CardTitle>📅 Date Range</CardTitle>
-            <CardDescription>First and most recent entries</CardDescription>
+            <CardTitle className="flex items-center">
+              <Calendar className="h-4 w-4 mr-2 flex-shrink-0" /> Date Range
+            </CardTitle>
+            <CardDescription>
+              Entry timeline and activity status
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="flex-1">
                 <p className="text-sm text-muted-foreground">Earliest Entry</p>
                 <p className="text-lg font-semibold">
@@ -141,18 +157,52 @@ export function OverviewTab() {
                   {formatDate(dateRange.latest)}
                 </p>
               </div>
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground">Days Since Last</p>
+                <p className="text-lg font-semibold">
+                  {(() => {
+                    const daysSince = differenceInDays(
+                      new Date(),
+                      new Date(dateRange.latest)
+                    );
+                    return daysSince === 0
+                      ? "Today"
+                      : `${daysSince} ${daysSince === 1 ? "day" : "days"} ago`;
+                  })()}
+                </p>
+              </div>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Top Names */}
+      {/* Hall of Fame (2+ Entries) */}
       <Card className="glass-effect">
         <CardHeader>
-          <CardTitle>🏆 Most Common Names</CardTitle>
-          <CardDescription>
-            Top participants in the Hall of Fame
-          </CardDescription>
+          <div
+            className="flex items-center justify-between cursor-pointer"
+            onClick={() => setIsNamesExpanded(!isNamesExpanded)}
+          >
+            <div>
+              <CardTitle className="flex items-center">
+                <Trophy className="h-4 w-4 mr-2 flex-shrink-0" /> Hall of Fame
+                (2+ Entries)
+              </CardTitle>
+              <CardDescription>
+                {(() => {
+                  const hallOfFamersCount =
+                    names?.filter((nameData) => nameData.count >= 2).length ||
+                    0;
+                  return `${hallOfFamersCount} participants with multiple Hall of Fame entries`;
+                })()}
+              </CardDescription>
+            </div>
+            <ChevronDown
+              className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${
+                isNamesExpanded ? "rotate-180" : ""
+              }`}
+            />
+          </div>
         </CardHeader>
         <CardContent>
           {namesLoading ? (
@@ -165,25 +215,42 @@ export function OverviewTab() {
               ))}
             </div>
           ) : (
-            <div className="space-y-3">
-              {names?.slice(0, 10).map((nameData, index) => (
-                <div
-                  key={nameData.name}
-                  className="flex items-center justify-between"
-                >
-                  <div className="flex items-center gap-3">
-                    <Badge variant={index < 3 ? "default" : "secondary"}>
-                      #{index + 1}
-                    </Badge>
-                    <span className="font-medium">{nameData.name}</span>
-                  </div>
-                  <Badge variant="outline">
-                    {nameData.count}{" "}
-                    {nameData.count === 1 ? "entry" : "entries"}
-                  </Badge>
+            (() => {
+              const hallOfFamers =
+                names?.filter((nameData) => nameData.count >= 2) || [];
+              const displayedNames = isNamesExpanded
+                ? hallOfFamers
+                : hallOfFamers.slice(0, 10);
+
+              return hallOfFamers.length === 0 ? (
+                <p className="text-muted-foreground text-center py-4">
+                  No participants with 2+ entries yet.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {displayedNames.map((nameData, index) => (
+                    <div
+                      key={nameData.name}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Badge variant={index < 3 ? "default" : "secondary"}>
+                          #{index + 1}
+                        </Badge>
+                        <span className="font-medium">{nameData.name}</span>
+                      </div>
+                      <Badge variant="outline">{nameData.count} entries</Badge>
+                    </div>
+                  ))}
+                  {!isNamesExpanded && hallOfFamers.length > 10 && (
+                    <p className="text-sm text-muted-foreground text-center pt-2 border-t">
+                      Click to see {hallOfFamers.length - 10} more hall of
+                      famers...
+                    </p>
+                  )}
                 </div>
-              ))}
-            </div>
+              );
+            })()
           )}
         </CardContent>
       </Card>
