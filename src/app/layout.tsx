@@ -10,6 +10,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://tchoupitoulas-data-challenge.vercel.app"),
   title: "Tchoupitoulas Data Challenge",
   description:
     "A fun and interactive data analysis application for exploring hall of fame entries",
