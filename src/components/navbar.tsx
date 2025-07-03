@@ -54,7 +54,7 @@ export function Navbar() {
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
-      <div className="bg-background/80 backdrop-blur-md border-b border-border/40">
+      <div className="bg-gradient-to-r from-emerald-100/70 to-pink-100/70 backdrop-blur-md border-b border-border/40">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Left side - Tchoup Data image */}
@@ -125,10 +125,13 @@ export function Navbar() {
 
           {/* Mobile Navigation Menu */}
           {isMobileMenuOpen && (
-            <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 border-t border-border/40 bg-background/80 backdrop-blur-md">
+            <div
+              id="mobile-menu"
+              className="md:hidden rounded-md border-t border-border/40 bg-background/90 backdrop-blur-md mb-2"
+            >
+              <div className="pt-2 pb-3 space-y-1 px-4">
                 <button
-                  className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors ${
+                  className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
                     isActive("/")
                       ? "text-primary bg-primary/10"
                       : "text-muted-foreground hover:text-primary hover:bg-primary/5"
@@ -138,7 +141,7 @@ export function Navbar() {
                   Home
                 </button>
                 <button
-                  className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors ${
+                  className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
                     isActive("/dashboard")
                       ? "text-primary bg-primary/10"
                       : "text-muted-foreground hover:text-primary hover:bg-primary/5"
@@ -148,7 +151,7 @@ export function Navbar() {
                   Dashboard
                 </button>
                 <button
-                  className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors ${
+                  className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
                     isActive("/about")
                       ? "text-primary bg-primary/10"
                       : "text-muted-foreground hover:text-primary hover:bg-primary/5"
