@@ -72,7 +72,7 @@ export default function Home() {
               className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto object-contain mb-6"
             />
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Welcome to the sweetest data analysis experience! Explore our Hall
+              Welcome to the sweetest data analysis experience! Explore the Hall
               of Fame entries with beautiful visualizations and interactive
               dashboards.
             </p>
@@ -158,7 +158,7 @@ export default function Home() {
               <CardHeader>
                 <CardTitle className="text-2xl">Ready to dive in?</CardTitle>
                 <CardDescription>
-                  Start exploring the Hall of Fame data and discover amazing
+                  Start exploring the Hall of Fame data and discover delicious
                   insights!
                 </CardDescription>
               </CardHeader>
