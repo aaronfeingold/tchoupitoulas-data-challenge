@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { QueryProvider } from "@/lib/query-provider";
 import { Poppins } from "next/font/google";
+import { Navbar } from "@/components/navbar";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -65,8 +66,11 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" type="image/png" />
       </head>
-      <body className={`${poppins.className} antialiased`}>
-        <QueryProvider>{children}</QueryProvider>
+      <body className={`${poppins.className} antialiased pt-16`}>
+        <QueryProvider>
+          <Navbar />
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );
