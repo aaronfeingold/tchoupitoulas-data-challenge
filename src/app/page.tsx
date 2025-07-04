@@ -18,6 +18,7 @@ import {
   TrendingUp,
   Rocket,
   IceCream,
+  BookOpen,
 } from "lucide-react";
 
 export default function Home() {
@@ -144,11 +145,20 @@ export default function Home() {
             <CardContent>
               <Button
                 size="lg"
-                variant="outline"
                 className="hover-lift"
                 onClick={handleDashboardNavigation}
               >
                 Launch Dashboard <Rocket className="h-4 w-4 ml-2" />
+              </Button>
+            </CardContent>
+            <CardContent>
+              <Button
+                size="lg"
+                variant="outline"
+                className="hover-lift"
+                onClick={() => router.push("/about")}
+              >
+                Learn About the Project <BookOpen className="h-4 w-4 ml-2" />
               </Button>
             </CardContent>
           </Card>
