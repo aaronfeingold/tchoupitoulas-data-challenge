@@ -26,9 +26,30 @@ export function Navbar() {
       setLastScrollY(currentScrollY);
     };
 
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      const mobileMenu = document.getElementById("mobile-menu");
+      const menuButton = target.closest("[data-mobile-menu-button]");
+
+      // If click is outside mobile menu and not on the menu button, close menu
+      if (
+        isMobileMenuOpen &&
+        mobileMenu &&
+        !mobileMenu.contains(target) &&
+        !menuButton
+      ) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [lastScrollY, isMobileMenuOpen]);
 
   const handleHomeClick = () => {
     setIsMobileMenuOpen(false);
@@ -77,17 +98,17 @@ export function Navbar() {
             <div className="hidden md:flex items-center space-x-6">
               <Link
                 href="/"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive("/") ? "text-primary" : "text-muted-foreground"
+                className={`text-sm font-medium transition-colors hover:text-emerald-700 ${
+                  isActive("/") ? "text-emerald-800" : "text-muted-foreground"
                 }`}
               >
                 Home
               </Link>
               <Link
                 href="/dashboard"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`text-sm font-medium transition-colors hover:text-emerald-700 ${
                   isActive("/dashboard")
-                    ? "text-primary"
+                    ? "text-emerald-800"
                     : "text-muted-foreground"
                 }`}
               >
@@ -95,8 +116,10 @@ export function Navbar() {
               </Link>
               <Link
                 href="/about"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive("/about") ? "text-primary" : "text-muted-foreground"
+                className={`text-sm font-medium transition-colors hover:text-emerald-700 ${
+                  isActive("/about")
+                    ? "text-emerald-800"
+                    : "text-muted-foreground"
                 }`}
               >
                 About
@@ -108,6 +131,7 @@ export function Navbar() {
               {/* Mobile menu button */}
               <div className="md:hidden">
                 <button
+                  data-mobile-menu-button
                   onClick={toggleMobileMenu}
                   className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
                 >
@@ -127,7 +151,7 @@ export function Navbar() {
           {isMobileMenuOpen && (
             <div
               id="mobile-menu"
-              className="md:hidden rounded-md border-t border-border/40 bg-background/90 backdrop-blur-md mb-2"
+              className="md:hidden border-t border-border/40 bg-background backdrop-blur-md mb-2 rounded-md"
             >
               <div className="pt-2 pb-3 space-y-1 px-4">
                 <button
