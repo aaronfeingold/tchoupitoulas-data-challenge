@@ -87,7 +87,8 @@ export default function AboutPage() {
               <CardDescription className="text-center">
                 Built for the ice cream lovers to support a local institution.
                 Track participation, celebrate achievements, and discover
-                patterns in engagement.
+                patterns in engagement. Who will be the next to complete the
+                challenge? When will be the speed record be broken?
               </CardDescription>
             </CardContent>
           </Card>
