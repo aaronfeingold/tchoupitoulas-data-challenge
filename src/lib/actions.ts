@@ -388,3 +388,57 @@ export async function revalidateAllCaches() {
     revalidateTag(tag);
   });
 }
+
+export const getYoungest = unstable_cache(
+  async () => {
+    try {
+      const result = await db.execute(sql`
+        SELECT name, age, ROUND(age/365.0, 1) as age_years
+        FROM hall_of_fame_entries
+        WHERE age IS NOT NULL
+        ORDER BY age ASC
+        LIMIT 1;
+      `);
+
+      return { success: true, data: result.rows[0] || null };
+    } catch (error) {
+      console.error("Error fetching youngest hall of famer:", error);
+      return {
+        success: false,
+        error: "Failed to fetch youngest hall of famer",
+      };
+    }
+  },
+  ["get-youngest"],
+  {
+    tags: [CACHE_TAGS.STATS],
+    revalidate: CACHE_DURATION,
+  }
+);
+
+export const getFastest = unstable_cache(
+  async () => {
+    try {
+      const result = await db.execute(sql`
+        SELECT name, elapsed_time,
+               FLOOR(elapsed_time / 60) as minutes,
+               (elapsed_time % 60) as seconds,
+               ROUND(elapsed_time / 60.0, 2) as minutes_decimal
+        FROM hall_of_fame_entries
+        WHERE elapsed_time IS NOT NULL
+        ORDER BY elapsed_time ASC
+        LIMIT 1;
+      `);
+
+      return { success: true, data: result.rows[0] || null };
+    } catch (error) {
+      console.error("Error fetching fastest completion:", error);
+      return { success: false, error: "Failed to fetch fastest completion" };
+    }
+  },
+  ["get-fastest"],
+  {
+    tags: [CACHE_TAGS.STATS],
+    revalidate: CACHE_DURATION,
+  }
+);
