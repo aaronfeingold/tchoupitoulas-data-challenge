@@ -44,14 +44,32 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent>
               <CardDescription className="text-base">
-                The Tchoupitoulas Data Challenge was born from a love of both
-                data analysis and delicious ice cream. What started as a simple
-                Hall of Fame tracking system has evolved into a comprehensive
-                data exploration platform that makes analytics as enjoyable as
-                your favorite sundae. The purpose of this site is to provide a
-                sortable view of the list of the Tchoupitoulas Challenge Hall of
-                Famers: those who have completed the greatest ice cream eating
-                challenge.
+                The{" "}
+                <span className="text-gradient font-bold">Tchoupitoulas</span>{" "}
+                Data <span className="text-gradient font-bold">Challenge</span>{" "}
+                was born from a love of both{" "}
+                <span className="font-bold text-primary"> data analysis</span>{" "}
+                and{" "}
+                <span className="font-bold text-primary">
+                  delicious ice cream
+                </span>
+                . The purpose of this site is to provide a sortable and
+                searchable view of the list of the{" "}
+                <Link
+                  href="https://creolecreamery.com/hall-of-fame/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-primary/80 underline underline-offset-2 font-medium"
+                >
+                  Tchoupitoulas Challenge Hall of Famers
+                </Link>
+                : those who have completed the greatest ice cream eating
+                challenge. Yet what started as a simple Hall of Fame tracking
+                system has evolved into a{" "}
+                <span className="font-bold text-primary">
+                  comprehensive data exploration platform
+                </span>{" "}
+                that makes analytics as enjoyable as your favorite sundae.
               </CardDescription>
             </CardContent>
           </Card>
