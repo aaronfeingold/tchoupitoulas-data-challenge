@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { BookOpen, Home, LayoutPanelTop } from "lucide-react";
 
 export function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
@@ -155,34 +156,34 @@ export function Navbar() {
             >
               <div className="pt-2 pb-3 space-y-1 px-4">
                 <button
-                  className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
+                  className={`flex items-center block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
                     isActive("/")
                       ? "text-primary bg-primary/10"
                       : "text-muted-foreground hover:text-primary hover:bg-primary/5"
                   }`}
                   onClick={() => handleLinkClick("/")}
                 >
-                  Home
+                  <Home className="h-4 w-4 mr-2" /> Home
                 </button>
                 <button
-                  className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
+                  className={`flex items-center block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
                     isActive("/dashboard")
                       ? "text-primary bg-primary/10"
                       : "text-muted-foreground hover:text-primary hover:bg-primary/5"
                   }`}
                   onClick={() => handleLinkClick("/dashboard")}
                 >
-                  Dashboard
+                  <LayoutPanelTop className="h-4 w-4 mr-2" /> Dashboard
                 </button>
                 <button
-                  className={`block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
+                  className={`flex items-center block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
                     isActive("/about")
                       ? "text-primary bg-primary/10"
                       : "text-muted-foreground hover:text-primary hover:bg-primary/5"
                   }`}
                   onClick={() => handleLinkClick("/about")}
                 >
-                  About
+                  <BookOpen className="h-4 w-4 mr-2" /> About
                 </button>
               </div>
             </div>
