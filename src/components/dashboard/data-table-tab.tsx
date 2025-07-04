@@ -36,7 +36,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { getAllEntries } from "@/lib/actions";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatAge, formatElapsedTime } from "@/lib/utils";
 import { HallOfFameEntry } from "@/lib/schema";
 
 type SortColumn = keyof HallOfFameEntry | null;
@@ -47,7 +47,7 @@ const CustomTooltip = ({
   children,
   content,
   show,
-  onToggle
+  onToggle,
 }: {
   children: React.ReactNode;
   content: string;
@@ -89,6 +89,10 @@ export function DataTableTab() {
     participantNumber: "",
     name: "",
     parsedDate: "",
+    notes: "",
+    elapsedTime: "",
+    completionCount: "",
+    age: "",
   });
 
   // State for column widths (in pixels)
@@ -96,6 +100,10 @@ export function DataTableTab() {
     participantNumber: 60, // Just wide enough for 5 digits
     name: 230, // Wider for long names
     parsedDate: 105,
+    notes: 150,
+    elapsedTime: 80,
+    completionCount: 100,
+    age: 80,
   });
 
   // State for tooltip
@@ -146,6 +154,38 @@ export function DataTableTab() {
         formatDate(entry.parsedDate)
           .toLowerCase()
           .includes(columnFilters.parsedDate.toLowerCase())
+      );
+    }
+
+    if (columnFilters.notes) {
+      filteredEntries = filteredEntries.filter(
+        (entry) =>
+          entry.notes
+            ?.toLowerCase()
+            .includes(columnFilters.notes.toLowerCase()) ?? false
+      );
+    }
+
+    if (columnFilters.elapsedTime) {
+      filteredEntries = filteredEntries.filter(
+        (entry) =>
+          entry.elapsedTime?.toString().includes(columnFilters.elapsedTime) ??
+          false
+      );
+    }
+
+    if (columnFilters.completionCount) {
+      filteredEntries = filteredEntries.filter(
+        (entry) =>
+          entry.completionCount
+            ?.toString()
+            .includes(columnFilters.completionCount) ?? false
+      );
+    }
+
+    if (columnFilters.age) {
+      filteredEntries = filteredEntries.filter(
+        (entry) => entry.age?.toString().includes(columnFilters.age) ?? false
       );
     }
 
@@ -269,8 +309,12 @@ export function DataTableTab() {
 
       setColumnWidths({
         participantNumber: isDesktop ? 80 : 60,
-        name: isDesktop ? 350 : 215,
-        parsedDate: isDesktop ? 140 : 105,
+        name: isDesktop ? 250 : 180,
+        parsedDate: isDesktop ? 120 : 90,
+        notes: isDesktop ? 150 : 120,
+        elapsedTime: isDesktop ? 80 : 70,
+        completionCount: isDesktop ? 100 : 80,
+        age: isDesktop ? 80 : 70,
       });
     };
 
@@ -392,7 +436,7 @@ export function DataTableTab() {
         </div>
 
         {/* Column Filters */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
           <div className="relative">
             <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
             <Input
@@ -413,6 +457,28 @@ export function DataTableTab() {
               className="pl-8 text-xs"
             />
           </div>
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+            <Input
+              placeholder="Filter notes..."
+              value={columnFilters.notes}
+              onChange={(e) =>
+                handleColumnFilterChange("notes", e.target.value)
+              }
+              className="pl-8 text-xs"
+            />
+          </div>
+          <div className="relative">
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+            <Input
+              placeholder="Filter completion count..."
+              value={columnFilters.completionCount}
+              onChange={(e) =>
+                handleColumnFilterChange("completionCount", e.target.value)
+              }
+              className="pl-8 text-xs"
+            />
+          </div>
         </div>
 
         {/* Table */}
@@ -424,6 +490,12 @@ export function DataTableTab() {
                   <SortableHeader column="parsedDate">Date</SortableHeader>
                   <SortableHeader column="name">Name</SortableHeader>
                   <SortableHeader column="participantNumber">ID</SortableHeader>
+                  <SortableHeader column="notes">Notes</SortableHeader>
+                  <SortableHeader column="elapsedTime">Time</SortableHeader>
+                  <SortableHeader column="completionCount">
+                    Completion
+                  </SortableHeader>
+                  <SortableHeader column="age">Age</SortableHeader>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -455,6 +527,46 @@ export function DataTableTab() {
                           minWidth: columnWidths.participantNumber,
                           maxWidth: columnWidths.participantNumber,
                         }}
+                        className="border-r border-border/50"
+                      >
+                        <div className="animate-pulse bg-muted h-4 rounded"></div>
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.notes,
+                          minWidth: columnWidths.notes,
+                          maxWidth: columnWidths.notes,
+                        }}
+                        className="border-r border-border/50"
+                      >
+                        <div className="animate-pulse bg-muted h-4 rounded"></div>
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.elapsedTime,
+                          minWidth: columnWidths.elapsedTime,
+                          maxWidth: columnWidths.elapsedTime,
+                        }}
+                        className="border-r border-border/50"
+                      >
+                        <div className="animate-pulse bg-muted h-4 rounded"></div>
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.completionCount,
+                          minWidth: columnWidths.completionCount,
+                          maxWidth: columnWidths.completionCount,
+                        }}
+                        className="border-r border-border/50"
+                      >
+                        <div className="animate-pulse bg-muted h-4 rounded"></div>
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.age,
+                          minWidth: columnWidths.age,
+                          maxWidth: columnWidths.age,
+                        }}
                       >
                         <div className="animate-pulse bg-muted h-4 rounded"></div>
                       </TableCell>
@@ -463,7 +575,7 @@ export function DataTableTab() {
                 ) : paginatedEntries.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={3}
+                      colSpan={7}
                       className="text-center py-8 text-muted-foreground"
                     >
                       No entries found.
@@ -488,7 +600,7 @@ export function DataTableTab() {
                           minWidth: columnWidths.name,
                           maxWidth: columnWidths.name,
                         }}
-                        className="font-xs md:font-medium border-r border-border/50"
+                        className="font-xs md:font-medium border-r border-border/50 truncate"
                       >
                         <CustomTooltip
                           content={entry.name}
@@ -506,11 +618,77 @@ export function DataTableTab() {
                           minWidth: columnWidths.participantNumber,
                           maxWidth: columnWidths.participantNumber,
                         }}
-                        className="font-xs md:font-medium"
+                        className="font-xs md:font-medium border-r border-border/50"
                       >
                         <Badge variant="outline">
                           {entry.participantNumber}
                         </Badge>
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.notes,
+                          minWidth: columnWidths.notes,
+                          maxWidth: columnWidths.notes,
+                        }}
+                        className="font-xs md:font-medium border-r border-border/50 truncate"
+                      >
+                        {entry.notes ? (
+                          <CustomTooltip
+                            content={entry.notes}
+                            show={tooltipVisible[`notes-${entry.id}`] || false}
+                            onToggle={(show) =>
+                              handleTooltipToggle(`notes-${entry.id}`, show)
+                            }
+                          >
+                            <div className="truncate">{entry.notes}</div>
+                          </CustomTooltip>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.elapsedTime,
+                          minWidth: columnWidths.elapsedTime,
+                          maxWidth: columnWidths.elapsedTime,
+                        }}
+                        className="font-xs md:font-medium border-r border-border/50"
+                      >
+                        {entry.elapsedTime ? (
+                          formatElapsedTime(entry.elapsedTime)
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.completionCount,
+                          minWidth: columnWidths.completionCount,
+                          maxWidth: columnWidths.completionCount,
+                        }}
+                        className="font-xs md:font-medium border-r border-border/50"
+                      >
+                        {entry.completionCount ? (
+                          <Badge variant="secondary">
+                            {entry.completionCount}
+                          </Badge>
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.age,
+                          minWidth: columnWidths.age,
+                          maxWidth: columnWidths.age,
+                        }}
+                        className="font-xs md:font-medium"
+                      >
+                        {entry.age ? (
+                          formatAge(entry.age)
+                        ) : (
+                          <span className="text-muted-foreground">-</span>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))
