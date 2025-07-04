@@ -17,7 +17,7 @@ export default function DashboardLayout({
               </h1>
               <p className="text-muted-foreground text-lg md:text-xl lg:text-2xl flex items-center">
                 <IceCream className="h-4 w-4 md:h-5 md:w-5 lg:h-6 lg:w-6 mr-2 flex-shrink-0" />
-                Sweet insights from our Hall of Fame entries
+                Sweet insights from the Hall of Fame
               </p>
             </div>
           </div>
