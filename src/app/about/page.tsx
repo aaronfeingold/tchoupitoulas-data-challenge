@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -10,8 +8,32 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { IceCream, Users, Database, TrendingUp } from "lucide-react";
+import { ImageCarousel } from "@/components/ui/image-carousel";
+import { readdir } from "fs/promises";
+import { join } from "path";
 
-export default function AboutPage() {
+async function getTchoupitoulas_images() {
+  try {
+    const publicDir = join(process.cwd(), "public", "tchoup-data-challenge");
+    const files = await readdir(publicDir);
+
+    // Filter for image files only
+    const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
+    const imageFiles = files.filter((file) =>
+      imageExtensions.some((ext) => file.toLowerCase().endsWith(ext))
+    );
+
+    // Return the full paths for the public directory
+    return imageFiles.map((file) => `/tchoup-data-challenge/${file}`);
+  } catch (error) {
+    console.error("Error reading tchoup-data-challenge directory:", error);
+    return [];
+  }
+}
+
+export default async function AboutPage() {
+  const tchoupitoulas_images = await getTchoupitoulas_images();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-mint/5">
       <div className="container mx-auto px-4 py-16">
@@ -86,9 +108,9 @@ export default function AboutPage() {
                 Our platform transforms raw Hall of Fame data into meaningful
                 insights through interactive visualizations, trend analysis, and
                 user-friendly dashboards. Every scoop of data tells a story
-                waiting to be discovered. The next time your friend says "I did
-                it 5 times and have the fastest time ever", you can check here
-                to see if your friend is telling the truth.
+                waiting to be discovered. The next time your friend says &quot;I
+                did it 5 times and have the fastest time ever&quot;, you can
+                check here to see if your friend is telling the truth.
               </CardDescription>
             </CardContent>
           </Card>
@@ -138,15 +160,24 @@ export default function AboutPage() {
           </Card>
         </div>
 
-        {/* Tchoup Sundae Image Section */}
+        {/* Tchoupitoulas Challenge Images Carousel */}
         <div className="text-center mb-16">
-          <Image
-            src="/Tchoup-Sundae-128x128.png"
-            alt="Tchoup Sundae"
-            width={128}
-            height={128}
-            className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto object-contain hover-lift"
-          />
+          {tchoupitoulas_images.length > 0 ? (
+            <div className="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto">
+              <ImageCarousel
+                images={tchoupitoulas_images}
+                autoplayDelay={2500}
+                alt="Tchoupitoulas Challenge"
+                className="w-full"
+                imageClassName="aspect-square object-cover"
+                showPreviews={true}
+              />
+            </div>
+          ) : (
+            <div className="text-muted-foreground">
+              <p>No challenge images available at the moment.</p>
+            </div>
+          )}
         </div>
 
         {/* Call to Action */}
