@@ -269,7 +269,7 @@ export function DataTableTab() {
 
       setColumnWidths({
         participantNumber: isDesktop ? 80 : 60,
-        name: isDesktop ? 350 : 230,
+        name: isDesktop ? 350 : 215,
         parsedDate: isDesktop ? 140 : 105,
       });
     };
