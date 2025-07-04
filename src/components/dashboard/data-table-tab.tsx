@@ -48,7 +48,7 @@ type SortDirection = "asc" | "desc";
 // Custom long-press hook
 const useLongPress = (callback: () => void, ms = 500) => {
   const [startLongPress, setStartLongPress] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
     if (startLongPress) {

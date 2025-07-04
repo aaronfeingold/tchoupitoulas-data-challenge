@@ -64,17 +64,19 @@ export function OverviewTab() {
   });
 
   const entries = entriesData?.success ? entriesData.data || [] : []; // super fallback to arr
-  const topHallOfFamers = (
-    namesData?.success ? namesData.data || [] : []
-  ) as Array<any>; // Type assertion to fix length/slice errors
+  const topHallOfFamers = namesData?.success ? namesData.data || [] : [];
   const topHallOfFamersCount = topHallOfFamers.length; // To keep it DRY
   const displayedNames = isNamesExpanded
     ? topHallOfFamers
     : topHallOfFamers.slice(0, 10);
   const gap = gapData?.success ? gapData.data : null;
   const streak = streakData?.success ? streakData.data : null;
-  const youngest = youngestData?.success ? (youngestData.data as any) : null;
-  const fastest = fastestData?.success ? (fastestData.data as any) : null;
+  const youngest = youngestData?.success
+    ? (youngestData.data as Record<string, unknown>)
+    : null;
+  const fastest = fastestData?.success
+    ? (fastestData.data as Record<string, unknown>)
+    : null;
 
   // Calculate stats
   const totalEntries = entries?.length || 0;
@@ -200,10 +202,10 @@ export function OverviewTab() {
                 ) : youngest ? (
                   <div className="text-lg font-semibold">
                     <div className="font-bold text-primary">
-                      {youngest.name}
+                      {youngest.name as string}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      {youngest.age_years} years old
+                      {youngest.age_years as string} years old
                     </div>
                   </div>
                 ) : (
@@ -218,10 +220,12 @@ export function OverviewTab() {
                   <div className="animate-pulse bg-muted h-6 w-16 rounded"></div>
                 ) : fastest ? (
                   <div className="text-lg font-semibold">
-                    <div className="font-bold text-primary">{fastest.name}</div>
+                    <div className="font-bold text-primary">
+                      {fastest.name as string}
+                    </div>
                     <div className="text-sm text-muted-foreground">
-                      {fastest.minutes}m{" "}
-                      {fastest.seconds.toString().padStart(2, "0")}s
+                      {fastest.minutes as string}m{" "}
+                      {(fastest.seconds as string).padStart(2, "0")}s
                     </div>
                   </div>
                 ) : (
@@ -280,16 +284,20 @@ export function OverviewTab() {
                 <div className="space-y-3">
                   {displayedNames.map((nameData, index) => (
                     <div
-                      key={nameData.name}
+                      key={nameData.name as string}
                       className="flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
                         <Badge variant={index < 3 ? "default" : "secondary"}>
                           #{index + 1}
                         </Badge>
-                        <span className="font-medium">{nameData.name}</span>
+                        <span className="font-medium">
+                          {nameData.name as string}
+                        </span>
                       </div>
-                      <Badge variant="outline">{nameData.count} entries</Badge>
+                      <Badge variant="outline">
+                        {nameData.count as string} entries
+                      </Badge>
                     </div>
                   ))}
                   {!isNamesExpanded && topHallOfFamersCount > 10 && (
