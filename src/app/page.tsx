@@ -124,7 +124,7 @@ export default function Home() {
         {/* Tchoup Data Image Section */}
         <div className="text-center mb-16">
           <Image
-            src="/Tchoup-Data-128x128.gif"
+            src="/Tchoup-Dance.gif"
             alt="Tchoup Data"
             width={128}
             height={128}
