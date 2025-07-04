@@ -11,9 +11,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import {
   getAllEntries,
-  getMostCommonNames,
   getLongestGap,
   getLongestStreak,
+  getTopHallOfFamers,
 } from "@/lib/actions";
 import { formatDate, formatNumber } from "@/lib/utils";
 import {
@@ -37,8 +37,8 @@ export function OverviewTab() {
   });
 
   const { data: namesData, isLoading: namesLoading } = useQuery({
-    queryKey: ["most-common-names"],
-    queryFn: getMostCommonNames,
+    queryKey: ["top-hall-of-famers"],
+    queryFn: getTopHallOfFamers,
   });
 
   const { data: gapData, isLoading: gapLoading } = useQuery({
@@ -53,6 +53,12 @@ export function OverviewTab() {
 
   const entries = entriesData?.success ? entriesData.data || [] : [];
   const names = namesData?.success ? namesData.data || [] : [];
+  const topHallOfFamers =
+    names?.filter((nameData) => nameData.count >= 2) || [];
+  const topHallOfFamersCount = topHallOfFamers.length;
+  const displayedNames = isNamesExpanded
+    ? topHallOfFamers
+    : topHallOfFamers.slice(0, 10);
   const gap = gapData?.success ? gapData.data : null;
   const streak = streakData?.success ? streakData.data : null;
 
@@ -185,23 +191,22 @@ export function OverviewTab() {
           >
             <div>
               <CardTitle className="flex items-center">
-                <Trophy className="h-4 w-4 mr-2 flex-shrink-0" /> Hall of Fame
-                (2+ Entries)
+                <Trophy className="h-4 w-4 mr-2 flex-shrink-0" /> Top Hall of
+                Famers (2+ Entries)
               </CardTitle>
               <CardDescription>
                 {(() => {
-                  const hallOfFamersCount =
-                    names?.filter((nameData) => nameData.count >= 2).length ||
-                    0;
-                  return `${hallOfFamersCount} participants with multiple Hall of Fame entries`;
+                  return `Showing ${displayedNames.length} of ${topHallOfFamersCount} participants`;
                 })()}
               </CardDescription>
             </div>
-            <ChevronDown
-              className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${
-                isNamesExpanded ? "rotate-180" : ""
-              }`}
-            />
+            {topHallOfFamersCount > 10 && (
+              <ChevronDown
+                className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${
+                  isNamesExpanded ? "rotate-180" : ""
+                }`}
+              />
+            )}
           </div>
         </CardHeader>
         <CardContent>
@@ -216,13 +221,7 @@ export function OverviewTab() {
             </div>
           ) : (
             (() => {
-              const hallOfFamers =
-                names?.filter((nameData) => nameData.count >= 2) || [];
-              const displayedNames = isNamesExpanded
-                ? hallOfFamers
-                : hallOfFamers.slice(0, 10);
-
-              return hallOfFamers.length === 0 ? (
+              return topHallOfFamersCount === 0 ? (
                 <p className="text-muted-foreground text-center py-4">
                   No participants with 2+ entries yet.
                 </p>
@@ -242,11 +241,14 @@ export function OverviewTab() {
                       <Badge variant="outline">{nameData.count} entries</Badge>
                     </div>
                   ))}
-                  {!isNamesExpanded && hallOfFamers.length > 10 && (
-                    <p className="text-sm text-muted-foreground text-center pt-2 border-t">
-                      Click to see {hallOfFamers.length - 10} more hall of
+                  {!isNamesExpanded && topHallOfFamersCount > 10 && (
+                    <button
+                      className="text-sm text-muted-foreground text-center pt-2 border-t w-full hover:text-emerald-700 transition-colors cursor-pointer"
+                      onClick={() => setIsNamesExpanded(!isNamesExpanded)}
+                    >
+                      Click to see {topHallOfFamersCount - 10} more hall of
                       famers...
-                    </p>
+                    </button>
                   )}
                 </div>
               );
