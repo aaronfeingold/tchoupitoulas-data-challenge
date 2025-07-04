@@ -48,7 +48,10 @@ export default function AboutPage() {
                 data analysis and delicious ice cream. What started as a simple
                 Hall of Fame tracking system has evolved into a comprehensive
                 data exploration platform that makes analytics as enjoyable as
-                your favorite sundae.
+                your favorite sundae. The purpose of this site is to provide a
+                sortable view of the list of the Tchoupitoulas Challenge Hall of
+                Famers: those who have completed the greatest ice cream eating
+                challenge.
               </CardDescription>
             </CardContent>
           </Card>
@@ -65,7 +68,9 @@ export default function AboutPage() {
                 Our platform transforms raw Hall of Fame data into meaningful
                 insights through interactive visualizations, trend analysis, and
                 user-friendly dashboards. Every scoop of data tells a story
-                waiting to be discovered.
+                waiting to be discovered. The next time your friend says "I did
+                it 5 times and have the fastest time ever", you can check here
+                to see if your friend is telling the truth.
               </CardDescription>
             </CardContent>
           </Card>
