@@ -42,6 +42,33 @@ import { HallOfFameEntry } from "@/lib/schema";
 type SortColumn = keyof HallOfFameEntry | null;
 type SortDirection = "asc" | "desc";
 
+// Custom Tooltip Component
+const CustomTooltip = ({
+  children,
+  content,
+  show,
+  onToggle
+}: {
+  children: React.ReactNode;
+  content: string;
+  show: boolean;
+  onToggle: (show: boolean) => void;
+}) => (
+  <div
+    className="relative inline-block"
+    onMouseEnter={() => onToggle(true)}
+    onMouseLeave={() => onToggle(false)}
+  >
+    {children}
+    {show && (
+      <div className="absolute z-50 px-2 py-1 text-xs text-white bg-gray-900 rounded shadow-lg whitespace-nowrap -top-8 left-1/2 transform -translate-x-1/2">
+        {content}
+        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-t-2 border-transparent border-t-gray-900"></div>
+      </div>
+    )}
+  </div>
+);
+
 export function DataTableTab() {
   const { data: entriesData, isLoading } = useQuery({
     queryKey: ["all-entries"],
@@ -70,6 +97,11 @@ export function DataTableTab() {
     name: 230, // Wider for long names
     parsedDate: 105,
   });
+
+  // State for tooltip
+  const [tooltipVisible, setTooltipVisible] = useState<Record<string, boolean>>(
+    {}
+  );
 
   // Refs for resize functionality
   const tableRef = useRef<HTMLTableElement>(null);
@@ -180,6 +212,11 @@ export function DataTableTab() {
     setCurrentPage(1);
   };
 
+  // Tooltip handlers
+  const handleTooltipToggle = (entryId: string, show: boolean) => {
+    setTooltipVisible((prev) => ({ ...prev, [entryId]: show }));
+  };
+
   // Resize handlers
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isResizing.current) return;
@@ -224,6 +261,24 @@ export function DataTableTab() {
       document.removeEventListener("mouseup", handleMouseUp);
     };
   }, [handleMouseMove, handleMouseUp]);
+
+  // Set responsive column widths based on screen size
+  useEffect(() => {
+    const updateColumnWidths = () => {
+      const isDesktop = window.innerWidth >= 768; // md breakpoint
+
+      setColumnWidths({
+        participantNumber: isDesktop ? 80 : 60,
+        name: isDesktop ? 350 : 230,
+        parsedDate: isDesktop ? 140 : 105,
+      });
+    };
+
+    updateColumnWidths();
+    window.addEventListener("resize", updateColumnWidths);
+
+    return () => window.removeEventListener("resize", updateColumnWidths);
+  }, []);
 
   const SortableHeader = ({
     column,
@@ -433,10 +488,19 @@ export function DataTableTab() {
                           minWidth: columnWidths.name,
                           maxWidth: columnWidths.name,
                         }}
-                        className="font-xs md:font-medium border-r border-border/50 truncate"
-                        title={entry.name}
+                        className="font-xs md:font-medium border-r border-border/50"
                       >
-                        {entry.name}
+                        <CustomTooltip
+                          content={entry.name}
+                          show={tooltipVisible[entry.id.toString()] || false}
+                          onToggle={(show) =>
+                            handleTooltipToggle(entry.id.toString(), show)
+                          }
+                        >
+                          <div className="truncate cursor-help">
+                            {entry.name}
+                          </div>
+                        </CustomTooltip>
                       </TableCell>
                       <TableCell
                         style={{
