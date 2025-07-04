@@ -497,9 +497,7 @@ export function DataTableTab() {
                             handleTooltipToggle(entry.id.toString(), show)
                           }
                         >
-                          <div className="truncate cursor-help">
-                            {entry.name}
-                          </div>
+                          <div className="truncate">{entry.name}</div>
                         </CustomTooltip>
                       </TableCell>
                       <TableCell
