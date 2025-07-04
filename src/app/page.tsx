@@ -57,7 +57,7 @@ export default function Home() {
             Welcome to the sweetest data analysis experience! Explore the public
             dataset of{" "}
             <span className="font-bold">
-              New Orleans' greatest ice cream eating challenge
+              New Orleans&apos; greatest ice cream eating challenge
             </span>{" "}
             with modernized, interactive visualizations and dashboards.
           </p>
