@@ -51,11 +51,9 @@ export function OverviewTab() {
     queryFn: getLongestStreak,
   });
 
-  const entries = entriesData?.success ? entriesData.data || [] : [];
-  const names = namesData?.success ? namesData.data || [] : [];
-  const topHallOfFamers =
-    names?.filter((nameData) => nameData.count >= 2) || [];
-  const topHallOfFamersCount = topHallOfFamers.length;
+  const entries = entriesData?.success ? entriesData.data || [] : []; // super fallback to arr
+  const topHallOfFamers = namesData?.success ? namesData.data || [] : [];
+  const topHallOfFamersCount = topHallOfFamers.length; // To keep it DRY
   const displayedNames = isNamesExpanded
     ? topHallOfFamers
     : topHallOfFamers.slice(0, 10);
@@ -109,16 +107,16 @@ export function OverviewTab() {
       {/* Key Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Total Entries"
+          title="Total Hall of Famers"
           value={formatNumber(totalEntries)}
-          description="Hall of Fame entries"
+          description="Challenge Completions"
           icon={CalendarDays}
           isLoading={entriesLoading}
         />
         <StatCard
           title="Unique Names"
           value={formatNumber(uniqueNames)}
-          description="Different participants"
+          description="Different Hall of Famers"
           icon={Users}
           isLoading={entriesLoading}
         />
