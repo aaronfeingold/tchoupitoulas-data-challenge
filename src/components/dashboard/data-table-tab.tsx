@@ -8,6 +8,7 @@ import {
   ChevronDown,
   Filter,
   GripVertical,
+  RefreshCw,
 } from "lucide-react";
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import {
@@ -35,7 +36,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { getAllEntries } from "@/lib/actions";
+import { getAllEntries, revalidateAllCaches } from "@/lib/actions";
 import { formatDate, formatAge, formatElapsedTime } from "@/lib/utils";
 import { HallOfFameEntry } from "@/lib/schema";
 
@@ -70,10 +71,24 @@ const CustomTooltip = ({
 );
 
 export function DataTableTab() {
-  const { data: entriesData, isLoading } = useQuery({
+  const {
+    data: entriesData,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["all-entries"],
     queryFn: getAllEntries,
   });
+
+  // Function to handle cache revalidation and data refresh
+  const handleRefresh = async () => {
+    try {
+      await revalidateAllCaches();
+      await refetch();
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+    }
+  };
 
   // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -403,6 +418,18 @@ export function DataTableTab() {
             </div>
           </div>
           <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefresh}
+              disabled={isLoading}
+              className="text-xs sm:text-sm"
+            >
+              <RefreshCw
+                className={`h-3 w-3 mr-1 ${isLoading ? "animate-spin" : ""}`}
+              />
+              Refresh
+            </Button>
             <Select
               value={pageSize.toString()}
               onValueChange={(value) => {
