@@ -9,6 +9,7 @@ import {
   Filter,
   GripVertical,
   RefreshCw,
+  X,
 } from "lucide-react";
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import {
@@ -36,6 +37,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+
 import { getAllEntries, revalidateAllCaches } from "@/lib/actions";
 import { formatDate, formatAge, formatElapsedTime } from "@/lib/utils";
 import { HallOfFameEntry } from "@/lib/schema";
@@ -43,31 +45,73 @@ import { HallOfFameEntry } from "@/lib/schema";
 type SortColumn = keyof HallOfFameEntry | null;
 type SortDirection = "asc" | "desc";
 
-// Custom Tooltip Component
-const CustomTooltip = ({
+// Custom long-press hook
+const useLongPress = (callback: () => void, ms = 500) => {
+  const [startLongPress, setStartLongPress] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    if (startLongPress) {
+      timeoutRef.current = setTimeout(callback, ms);
+    } else {
+      clearTimeout(timeoutRef.current);
+    }
+
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
+  }, [startLongPress, callback, ms]);
+
+  const start = useCallback(() => {
+    setStartLongPress(true);
+  }, []);
+
+  const stop = useCallback(() => {
+    setStartLongPress(false);
+  }, []);
+
+  return {
+    onMouseDown: start,
+    onMouseUp: stop,
+    onMouseLeave: stop,
+    onTouchStart: start,
+    onTouchEnd: stop,
+  };
+};
+
+// Mobile-friendly tooltip component
+const MobileTooltip = ({
   children,
   content,
-  show,
-  onToggle,
+  isOpen,
+  onOpenChange,
+  longPressHandlers,
 }: {
   children: React.ReactNode;
   content: string;
-  show: boolean;
-  onToggle: (show: boolean) => void;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  longPressHandlers: ReturnType<typeof useLongPress>;
 }) => (
-  <div
-    className="relative inline-block"
-    onMouseEnter={() => onToggle(true)}
-    onMouseLeave={() => onToggle(false)}
-  >
-    {children}
-    {show && (
-      <div className="absolute z-50 px-2 py-1 text-xs text-white bg-gray-900 rounded shadow-lg whitespace-nowrap -top-8 left-1/2 transform -translate-x-1/2">
-        {content}
-        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-t-2 border-transparent border-t-gray-900"></div>
+  <>
+    {isOpen && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="bg-white rounded-lg p-4 max-w-sm mx-4 max-h-64 overflow-y-auto">
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-sm font-medium">Full Content</h3>
+            <button
+              onClick={() => onOpenChange(false)}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <p className="text-sm break-words">{content}</p>
+        </div>
       </div>
     )}
-  </div>
+    <div {...longPressHandlers}>{children}</div>
+  </>
 );
 
 export function DataTableTab() {
@@ -89,6 +133,10 @@ export function DataTableTab() {
       console.error("Error refreshing data:", error);
     }
   };
+
+  // Long-press handlers for tooltips
+  const nameLongPress = useLongPress(() => {}, 500);
+  const notesLongPress = useLongPress(() => {}, 500);
 
   // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -323,13 +371,13 @@ export function DataTableTab() {
       const isDesktop = window.innerWidth >= 768; // md breakpoint
 
       setColumnWidths({
-        participantNumber: isDesktop ? 80 : 60,
-        name: isDesktop ? 250 : 180,
-        parsedDate: isDesktop ? 120 : 90,
-        notes: isDesktop ? 150 : 120,
-        elapsedTime: isDesktop ? 80 : 70,
-        completionCount: isDesktop ? 100 : 80,
-        age: isDesktop ? 80 : 70,
+        participantNumber: isDesktop ? 80 : 70,
+        name: isDesktop ? 250 : 200,
+        parsedDate: isDesktop ? 120 : 100,
+        notes: isDesktop ? 150 : 130,
+        elapsedTime: isDesktop ? 80 : 75,
+        completionCount: isDesktop ? 100 : 90,
+        age: isDesktop ? 80 : 75,
       });
     };
 
@@ -361,9 +409,9 @@ export function DataTableTab() {
           : "auto",
       }}
     >
-      <div className="flex items-center gap-1 pr-2">
-        {children}
-        <div className="flex flex-col">
+      <div className="flex items-start gap-1 pr-2">
+        <div className="flex-1 min-w-0">{children}</div>
+        <div className="flex flex-col flex-shrink-0">
           <ChevronUp
             className={`h-3 w-3 ${
               sortColumn === column && sortDirection === "asc"
@@ -520,7 +568,10 @@ export function DataTableTab() {
                   <SortableHeader column="notes">Notes</SortableHeader>
                   <SortableHeader column="elapsedTime">Time</SortableHeader>
                   <SortableHeader column="completionCount">
-                    Completion
+                    <div className="whitespace-normal leading-tight text-xs sm:text-sm">
+                      <span className="hidden sm:inline">Completion</span>
+                      <span className="sm:hidden">Comp.</span>
+                    </div>
                   </SortableHeader>
                   <SortableHeader column="age">Age</SortableHeader>
                 </TableRow>
@@ -612,7 +663,7 @@ export function DataTableTab() {
                   paginatedEntries.map((entry) => (
                     <TableRow key={entry.id}>
                       <TableCell
-                        className="font-xs md:font-md border-r border-border/50"
+                        className="text-xs sm:text-sm border-r border-border/50"
                         style={{
                           width: columnWidths.parsedDate,
                           minWidth: columnWidths.parsedDate,
@@ -627,17 +678,18 @@ export function DataTableTab() {
                           minWidth: columnWidths.name,
                           maxWidth: columnWidths.name,
                         }}
-                        className="font-xs md:font-medium border-r border-border/50 truncate"
+                        className="text-xs sm:text-sm font-medium border-r border-border/50 truncate"
                       >
-                        <CustomTooltip
+                        <MobileTooltip
                           content={entry.name}
-                          show={tooltipVisible[entry.id.toString()] || false}
-                          onToggle={(show) =>
-                            handleTooltipToggle(entry.id.toString(), show)
+                          isOpen={tooltipVisible[entry.id.toString()] || false}
+                          onOpenChange={(open) =>
+                            handleTooltipToggle(entry.id.toString(), open)
                           }
+                          longPressHandlers={nameLongPress}
                         >
                           <div className="truncate">{entry.name}</div>
-                        </CustomTooltip>
+                        </MobileTooltip>
                       </TableCell>
                       <TableCell
                         style={{
@@ -645,7 +697,7 @@ export function DataTableTab() {
                           minWidth: columnWidths.participantNumber,
                           maxWidth: columnWidths.participantNumber,
                         }}
-                        className="font-xs md:font-medium border-r border-border/50"
+                        className="text-xs sm:text-sm font-medium border-r border-border/50"
                       >
                         <Badge variant="outline">
                           {entry.participantNumber}
@@ -657,18 +709,21 @@ export function DataTableTab() {
                           minWidth: columnWidths.notes,
                           maxWidth: columnWidths.notes,
                         }}
-                        className="font-xs md:font-medium border-r border-border/50 truncate"
+                        className="text-xs sm:text-sm font-medium border-r border-border/50 truncate"
                       >
                         {entry.notes ? (
-                          <CustomTooltip
+                          <MobileTooltip
                             content={entry.notes}
-                            show={tooltipVisible[`notes-${entry.id}`] || false}
-                            onToggle={(show) =>
-                              handleTooltipToggle(`notes-${entry.id}`, show)
+                            isOpen={
+                              tooltipVisible[`notes-${entry.id}`] || false
                             }
+                            onOpenChange={(open) =>
+                              handleTooltipToggle(`notes-${entry.id}`, open)
+                            }
+                            longPressHandlers={notesLongPress}
                           >
                             <div className="truncate">{entry.notes}</div>
-                          </CustomTooltip>
+                          </MobileTooltip>
                         ) : (
                           <span className="text-muted-foreground">-</span>
                         )}
@@ -679,7 +734,7 @@ export function DataTableTab() {
                           minWidth: columnWidths.elapsedTime,
                           maxWidth: columnWidths.elapsedTime,
                         }}
-                        className="font-xs md:font-medium border-r border-border/50"
+                        className="text-xs sm:text-sm font-medium border-r border-border/50"
                       >
                         {entry.elapsedTime ? (
                           formatElapsedTime(entry.elapsedTime)
@@ -693,7 +748,7 @@ export function DataTableTab() {
                           minWidth: columnWidths.completionCount,
                           maxWidth: columnWidths.completionCount,
                         }}
-                        className="font-xs md:font-medium border-r border-border/50"
+                        className="text-xs sm:text-sm font-medium border-r border-border/50"
                       >
                         {entry.completionCount ? (
                           <Badge variant="secondary">
@@ -709,7 +764,7 @@ export function DataTableTab() {
                           minWidth: columnWidths.age,
                           maxWidth: columnWidths.age,
                         }}
-                        className="font-xs md:font-medium"
+                        className="text-xs sm:text-sm font-medium"
                       >
                         {entry.age ? (
                           formatAge(entry.age)
