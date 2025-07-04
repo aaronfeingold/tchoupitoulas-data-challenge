@@ -14,6 +14,8 @@ import {
   getLongestGap,
   getLongestStreak,
   getTopHallOfFamers,
+  getYoungest,
+  getFastest,
 } from "@/lib/actions";
 import { formatDate, formatNumber } from "@/lib/utils";
 import {
@@ -51,6 +53,16 @@ export function OverviewTab() {
     queryFn: getLongestStreak,
   });
 
+  const { data: youngestData, isLoading: youngestLoading } = useQuery({
+    queryKey: ["youngest"],
+    queryFn: getYoungest,
+  });
+
+  const { data: fastestData, isLoading: fastestLoading } = useQuery({
+    queryKey: ["fastest"],
+    queryFn: getFastest,
+  });
+
   const entries = entriesData?.success ? entriesData.data || [] : []; // super fallback to arr
   const topHallOfFamers = (
     namesData?.success ? namesData.data || [] : []
@@ -61,6 +73,8 @@ export function OverviewTab() {
     : topHallOfFamers.slice(0, 10);
   const gap = gapData?.success ? gapData.data : null;
   const streak = streakData?.success ? streakData.data : null;
+  const youngest = youngestData?.success ? (youngestData.data as any) : null;
+  const fastest = fastestData?.success ? (fastestData.data as any) : null;
 
   // Calculate stats
   const totalEntries = entries?.length || 0;
@@ -150,7 +164,7 @@ export function OverviewTab() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               <div className="flex-1">
                 <p className="text-sm text-muted-foreground">Earliest Entry</p>
                 <p className="text-lg font-semibold">
@@ -176,6 +190,43 @@ export function OverviewTab() {
                       : `${daysSince} ${daysSince === 1 ? "day" : "days"} ago`;
                   })()}
                 </p>
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-muted-foreground">
+                  Youngest Hall of Famer
+                </div>
+                {youngestLoading ? (
+                  <div className="animate-pulse bg-muted h-6 w-16 rounded"></div>
+                ) : youngest ? (
+                  <div className="text-lg font-semibold">
+                    <div className="font-bold text-primary">
+                      {youngest.name}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {youngest.age_years} years old
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-lg font-semibold">-</div>
+                )}
+              </div>
+              <div className="flex-1">
+                <div className="text-sm text-muted-foreground">
+                  Fastest Known Time
+                </div>
+                {fastestLoading ? (
+                  <div className="animate-pulse bg-muted h-6 w-16 rounded"></div>
+                ) : fastest ? (
+                  <div className="text-lg font-semibold">
+                    <div className="font-bold text-primary">{fastest.name}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {fastest.minutes}m{" "}
+                      {fastest.seconds.toString().padStart(2, "0")}s
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-lg font-semibold">-</div>
+                )}
               </div>
             </div>
           </CardContent>
