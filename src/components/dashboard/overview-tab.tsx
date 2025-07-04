@@ -52,7 +52,9 @@ export function OverviewTab() {
   });
 
   const entries = entriesData?.success ? entriesData.data || [] : []; // super fallback to arr
-  const topHallOfFamers = namesData?.success ? namesData.data || [] : [];
+  const topHallOfFamers = (
+    namesData?.success ? namesData.data || [] : []
+  ) as Array<any>; // Type assertion to fix length/slice errors
   const topHallOfFamersCount = topHallOfFamers.length; // To keep it DRY
   const displayedNames = isNamesExpanded
     ? topHallOfFamers
