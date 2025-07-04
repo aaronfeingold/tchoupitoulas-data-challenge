@@ -164,7 +164,7 @@ export function DataTableTab() {
     name: 230, // Wider for long names
     parsedDate: 105,
     notes: 150,
-    elapsedTime: 80,
+    elapsedTime: 100,
     completionCount: 100,
     age: 80,
   });
@@ -566,11 +566,18 @@ export function DataTableTab() {
                   <SortableHeader column="name">Name</SortableHeader>
                   <SortableHeader column="participantNumber">ID</SortableHeader>
                   <SortableHeader column="notes">Notes</SortableHeader>
-                  <SortableHeader column="elapsedTime">Time</SortableHeader>
-                  <SortableHeader column="completionCount">
+                  <SortableHeader column="elapsedTime">
+                    {" "}
                     <div className="whitespace-normal leading-tight text-xs sm:text-sm">
-                      <span className="hidden sm:inline">Completion</span>
-                      <span className="sm:hidden">Comp.</span>
+                      <span className="hidden sm:inline">Speed</span>
+                      <span className="sm:hidden">Speed</span>
+                    </div>
+                  </SortableHeader>
+                  <SortableHeader column="completionCount">
+                    {" "}
+                    <div className="whitespace-normal leading-tight text-xs sm:text-sm">
+                      <span className="hidden sm:inline">Times</span>
+                      <span className="sm:hidden">Times</span>
                     </div>
                   </SortableHeader>
                   <SortableHeader column="age">Age</SortableHeader>
