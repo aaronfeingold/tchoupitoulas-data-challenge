@@ -124,11 +124,12 @@ export default function Home() {
         {/* Tchoup Data Image Section */}
         <div className="text-center mb-16">
           <Image
-            src="/Tchoup-Data-128x128.png"
+            src="/Tchoup-Data-128x128.gif"
             alt="Tchoup Data"
             width={128}
             height={128}
             className="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mx-auto object-contain hover-lift"
+            unoptimized
           />
         </div>
 
