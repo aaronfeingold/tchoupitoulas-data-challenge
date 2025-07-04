@@ -225,7 +225,7 @@ export function OverviewTab() {
                     </div>
                     <div className="text-sm text-muted-foreground">
                       {fastest.minutes as string}m{" "}
-                      {(fastest.seconds as string).padStart(2, "0")}s
+                      {String(fastest.seconds).padStart(2, "0")}s
                     </div>
                   </div>
                 ) : (
