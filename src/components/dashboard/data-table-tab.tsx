@@ -375,7 +375,7 @@ export function DataTableTab() {
         name: isDesktop ? 250 : 200,
         parsedDate: isDesktop ? 120 : 100,
         notes: isDesktop ? 150 : 130,
-        elapsedTime: isDesktop ? 80 : 75,
+        elapsedTime: isDesktop ? 100 : 90,
         completionCount: isDesktop ? 100 : 90,
         age: isDesktop ? 80 : 75,
       });
@@ -409,7 +409,7 @@ export function DataTableTab() {
           : "auto",
       }}
     >
-      <div className="flex items-start gap-1 pr-2">
+      <div className="flex items-start gap-2 pr-2">
         <div className="flex-1 min-w-0">{children}</div>
         <div className="flex flex-col flex-shrink-0">
           <ChevronUp
@@ -567,18 +567,12 @@ export function DataTableTab() {
                   <SortableHeader column="participantNumber">ID</SortableHeader>
                   <SortableHeader column="notes">Notes</SortableHeader>
                   <SortableHeader column="elapsedTime">
-                    {" "}
-                    <div className="whitespace-normal leading-tight text-xs sm:text-sm">
-                      <span className="hidden sm:inline">Speed</span>
-                      <span className="sm:hidden">Speed</span>
-                    </div>
+                    <span className="hidden sm:inline">Speed</span>
+                    <span className="sm:hidden">Speed</span>
                   </SortableHeader>
                   <SortableHeader column="completionCount">
-                    {" "}
-                    <div className="whitespace-normal leading-tight text-xs sm:text-sm">
-                      <span className="hidden sm:inline">Times</span>
-                      <span className="sm:hidden">Times</span>
-                    </div>
+                    <span className="hidden sm:inline">Times</span>
+                    <span className="sm:hidden">Times</span>
                   </SortableHeader>
                   <SortableHeader column="age">Age</SortableHeader>
                 </TableRow>
