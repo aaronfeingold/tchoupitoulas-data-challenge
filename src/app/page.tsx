@@ -59,10 +59,18 @@ export default function Home() {
           </p>
           <Button
             size="lg"
-            className="hover-lift text-lg px-8 py-6"
+            className="hover-lift text-lg px-8 py-6 mb-4 sm:mb-0 sm:mr-4"
             onClick={handleDashboardNavigation}
           >
             Explore the Dashboard <IceCream className="h-4 w-4 mr-2" />
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="hover-lift text-lg px-8 py-6"
+            onClick={() => router.push("/about")}
+          >
+            Learn About the Project <BookOpen className="h-4 w-4 ml-2" />
           </Button>
         </div>
 
