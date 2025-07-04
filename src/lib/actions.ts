@@ -115,6 +115,7 @@ export const getMonthlyTotals = unstable_cache(
   }
 );
 
+// TODO: This is not used anywhere, but it will be used soon..
 export const getDailyTotalsForMonth = unstable_cache(
   async (year: number, month: number) => {
     try {
@@ -163,7 +164,7 @@ export const getDailyTotalsForMonth = unstable_cache(
   }
 );
 
-export const getMostCommonNames = unstable_cache(
+export const getTopHallOfFamers = unstable_cache(
   async () => {
     try {
       const result = await db
@@ -173,8 +174,8 @@ export const getMostCommonNames = unstable_cache(
         })
         .from(hallOfFameEntries)
         .groupBy(hallOfFameEntries.name)
-        .orderBy(desc(count()))
-        .limit(10);
+        .having(gte(count(), 2))
+        .orderBy(desc(count()));
 
       return { success: true, data: result };
     } catch (error) {
@@ -182,13 +183,14 @@ export const getMostCommonNames = unstable_cache(
       return { success: false, error: "Failed to fetch most common names" };
     }
   },
-  ["get-most-common-names"],
+  ["get-top-hall-of-famers"],
   {
     tags: [CACHE_TAGS.NAMES],
     revalidate: CACHE_DURATION,
   }
 );
 
+// TODO: This is not used anywhere, but it will be used to analyze names...
 export const getUniqueNames = unstable_cache(
   async () => {
     try {
@@ -216,6 +218,7 @@ export const getUniqueNames = unstable_cache(
   }
 );
 
+// TODO: This is not used anywhere, but it will be used to analyze names...
 export const getEntriesForName = unstable_cache(
   async (name: string) => {
     try {
