@@ -19,6 +19,7 @@ import {
   Rocket,
   IceCream,
   BookOpen,
+  Info,
 } from "lucide-react";
 
 export default function Home() {
@@ -35,7 +36,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-mint/5">
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-12 md:py-16">
         {/* Hero Section */}
         <div
           className={`text-center mb-16  transition-all duration-500 ${
@@ -53,9 +54,12 @@ export default function Home() {
             className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mx-auto object-contain mb-6"
           />
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Welcome to the sweetest data analysis experience! Explore the Hall
-            of Fame entries with beautiful visualizations and interactive
-            dashboards.
+            Welcome to the sweetest data analysis experience! Explore the public
+            dataset of{" "}
+            <span className="font-bold">
+              New Orleans' greatest ice cream eating challenge
+            </span>{" "}
+            with modernized, interactive visualizations and dashboards.
           </p>
           <Button
             size="lg"
@@ -70,7 +74,7 @@ export default function Home() {
             className="hover-lift text-lg px-8 py-6"
             onClick={() => router.push("/about")}
           >
-            Learn About the Project <BookOpen className="h-4 w-4 ml-2" />
+            More Details Here <Info className="h-4 w-4 ml-2" />
           </Button>
         </div>
 
