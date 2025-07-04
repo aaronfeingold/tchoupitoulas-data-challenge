@@ -66,9 +66,9 @@ export function DataTableTab() {
 
   // State for column widths (in pixels)
   const [columnWidths, setColumnWidths] = useState({
-    participantNumber: 80, // Just wide enough for 5 digits
-    name: 280, // Wider for long names
-    parsedDate: 160,
+    participantNumber: 60, // Just wide enough for 5 digits
+    name: 230, // Wider for long names
+    parsedDate: 105,
   });
 
   // Refs for resize functionality
@@ -283,11 +283,10 @@ export function DataTableTab() {
     <Card className="glass-effect">
       <CardHeader>
         <CardTitle className="flex items-center">
-          <Trophy className="h-4 w-4 mr-2 flex-shrink-0" /> Hall of Fame Entries
+          <Trophy className="h-4 w-4 mr-2 flex-shrink-0" /> Hall of Famers
         </CardTitle>
         <CardDescription>
-          Complete dataset of all hall of fame entries (
-          {filteredAndSortedEntries.length} of {entries.length} total)
+          Total:{filteredAndSortedEntries.length}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -367,11 +366,9 @@ export function DataTableTab() {
             <Table ref={tableRef} className="table-fixed">
               <TableHeader>
                 <TableRow>
-                  <SortableHeader column="participantNumber">ID</SortableHeader>
+                  <SortableHeader column="parsedDate">Date</SortableHeader>
                   <SortableHeader column="name">Name</SortableHeader>
-                  <SortableHeader column="parsedDate">
-                    Parsed Date
-                  </SortableHeader>
+                  <SortableHeader column="participantNumber">ID</SortableHeader>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -380,9 +377,9 @@ export function DataTableTab() {
                     <TableRow key={i}>
                       <TableCell
                         style={{
-                          width: columnWidths.participantNumber,
-                          minWidth: columnWidths.participantNumber,
-                          maxWidth: columnWidths.participantNumber,
+                          width: columnWidths.parsedDate,
+                          minWidth: columnWidths.parsedDate,
+                          maxWidth: columnWidths.parsedDate,
                         }}
                         className="border-r border-border/50"
                       >
@@ -391,7 +388,6 @@ export function DataTableTab() {
                       <TableCell
                         style={{
                           width: columnWidths.name,
-                          minWidth: columnWidths.name,
                           maxWidth: columnWidths.name,
                         }}
                         className="border-r border-border/50"
@@ -400,9 +396,9 @@ export function DataTableTab() {
                       </TableCell>
                       <TableCell
                         style={{
-                          width: columnWidths.parsedDate,
-                          minWidth: columnWidths.parsedDate,
-                          maxWidth: columnWidths.parsedDate,
+                          width: columnWidths.participantNumber,
+                          minWidth: columnWidths.participantNumber,
+                          maxWidth: columnWidths.participantNumber,
                         }}
                       >
                         <div className="animate-pulse bg-muted h-4 rounded"></div>
@@ -422,29 +418,7 @@ export function DataTableTab() {
                   paginatedEntries.map((entry) => (
                     <TableRow key={entry.id}>
                       <TableCell
-                        style={{
-                          width: columnWidths.participantNumber,
-                          minWidth: columnWidths.participantNumber,
-                          maxWidth: columnWidths.participantNumber,
-                        }}
-                        className="border-r border-border/50"
-                      >
-                        <Badge variant="outline">
-                          {entry.participantNumber}
-                        </Badge>
-                      </TableCell>
-                      <TableCell
-                        style={{
-                          width: columnWidths.name,
-                          minWidth: columnWidths.name,
-                          maxWidth: columnWidths.name,
-                        }}
-                        className="font-medium border-r border-border/50 truncate"
-                        title={entry.name}
-                      >
-                        {entry.name}
-                      </TableCell>
-                      <TableCell
+                        className="font-xs md:font-md border-r border-border/50"
                         style={{
                           width: columnWidths.parsedDate,
                           minWidth: columnWidths.parsedDate,
@@ -452,6 +426,29 @@ export function DataTableTab() {
                         }}
                       >
                         {formatDate(entry.parsedDate)}
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.name,
+                          minWidth: columnWidths.name,
+                          maxWidth: columnWidths.name,
+                        }}
+                        className="font-xs md:font-medium border-r border-border/50 truncate"
+                        title={entry.name}
+                      >
+                        {entry.name}
+                      </TableCell>
+                      <TableCell
+                        style={{
+                          width: columnWidths.participantNumber,
+                          minWidth: columnWidths.participantNumber,
+                          maxWidth: columnWidths.participantNumber,
+                        }}
+                        className="font-xs md:font-medium"
+                      >
+                        <Badge variant="outline">
+                          {entry.participantNumber}
+                        </Badge>
                       </TableCell>
                     </TableRow>
                   ))
