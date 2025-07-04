@@ -167,17 +167,24 @@ export const getDailyTotalsForMonth = unstable_cache(
 export const getTopHallOfFamers = unstable_cache(
   async () => {
     try {
-      const result = await db
-        .select({
-          name: hallOfFameEntries.name,
-          count: count(),
-        })
-        .from(hallOfFameEntries)
-        .groupBy(hallOfFameEntries.name)
-        .having(gte(count(), 2))
-        .orderBy(desc(count()));
+      const result = await db.execute(sql`
+        WITH completion_stats AS (
+          SELECT
+            name,
+            COUNT(*) as actual_entries,
+            MAX(COALESCE(completion_count, 1)) as max_implied_count
+          FROM hall_of_fame_entries
+          GROUP BY name
+        )
+        SELECT
+          name,
+          GREATEST(actual_entries, max_implied_count) as count
+        FROM completion_stats
+        WHERE GREATEST(actual_entries, max_implied_count) >= 2
+        ORDER BY count DESC, name ASC
+      `);
 
-      return { success: true, data: result };
+      return { success: true, data: result.rows };
     } catch (error) {
       console.error("Error fetching most common names:", error);
       return { success: false, error: "Failed to fetch most common names" };
