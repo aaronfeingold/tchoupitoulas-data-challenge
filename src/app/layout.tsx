@@ -4,6 +4,7 @@ import { QueryProvider } from "@/lib/query-provider";
 import { Poppins } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -81,6 +82,7 @@ export default function RootLayout({
             gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');
           `}
         </Script>
+        <Analytics />
         <QueryProvider>
           <Navbar />
           {children}
