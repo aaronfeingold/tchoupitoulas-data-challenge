@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, Home, LayoutPanelTop } from "lucide-react";
+import { UserAvatar } from "./auth/user-avatar";
 
 export function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
@@ -127,8 +128,13 @@ export function Navbar() {
               </Link>
             </div>
 
-            {/* Right side - Mobile menu button */}
-            <div className="flex items-center">
+            {/* Right side - User avatar and mobile menu */}
+            <div className="flex items-center space-x-3">
+              {/* User Avatar - always visible */}
+              <div className="hidden md:block">
+                <UserAvatar />
+              </div>
+              
               {/* Mobile menu button */}
               <div className="md:hidden">
                 <button
@@ -155,6 +161,10 @@ export function Navbar() {
               className="md:hidden border-t border-border/40 bg-background backdrop-blur-md mb-2 rounded-md"
             >
               <div className="pt-2 pb-3 space-y-1 px-4">
+                {/* Mobile user avatar */}
+                <div className="flex justify-center py-2 border-b border-border/40 mb-2">
+                  <UserAvatar />
+                </div>
                 <button
                   className={`flex items-center block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
                     isActive("/")
