@@ -4,12 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:local": "cp env.example .env.local && next dev --turbopack",
+    "dev:tunnel": "echo 'Start ngrok in another terminal: ngrok http 3000' && next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "setup:env": "cp env.example .env.local && echo 'Created .env.local from env.example. Please update with your OAuth credentials.'",
+    "setup:secret": "node -e \"console.log('Add this to .env.local as NEXTAUTH_SECRET='); console.log(require('crypto').randomBytes(32).toString('base64'))\""
   },
   "dependencies": {
     "@auth/core": "^0.40.0",
