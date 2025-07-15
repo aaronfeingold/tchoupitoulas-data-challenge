@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { QueryProvider } from "@/lib/query-provider";
+import { AuthSessionProvider } from "@/lib/session-provider";
 import { Poppins } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import Script from "next/script";
@@ -83,10 +84,12 @@ export default function RootLayout({
           `}
         </Script>
         <Analytics />
-        <QueryProvider>
-          <Navbar />
-          {children}
-        </QueryProvider>
+        <AuthSessionProvider>
+          <QueryProvider>
+            <Navbar />
+            {children}
+          </QueryProvider>
+        </AuthSessionProvider>
       </body>
     </html>
   );
