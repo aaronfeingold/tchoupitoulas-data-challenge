@@ -151,12 +151,93 @@ openssl rand -base64 32
 ```
 Add this to your `.env.local` as `NEXTAUTH_SECRET`.
 
+### Developer Quality of Life - Multiple Environment Support
+
+Most OAuth providers allow multiple redirect URIs, making local development easier:
+
+#### Google OAuth - Multiple URIs
+- In Google Cloud Console, you can add **multiple** authorized redirect URIs:
+  ```
+  http://localhost:3000/api/auth/callback/google
+  http://localhost:3001/api/auth/callback/google  (if using different port)
+  https://yourdomain.com/api/auth/callback/google
+  https://staging.yourdomain.com/api/auth/callback/google
+  ```
+
+#### GitHub OAuth - Multiple Apps Approach
+- **Option 1**: Create separate OAuth apps for each environment:
+  - "MyApp - Development" (localhost callback)
+  - "MyApp - Staging" (staging domain callback)  
+  - "MyApp - Production" (production domain callback)
+- **Option 2**: GitHub allows multiple callback URLs in a single app
+
+#### Facebook OAuth - Multiple Platforms
+- In Facebook app settings, you can add multiple Valid OAuth Redirect URIs
+- Add all your environments at once
+
+### Environment-Specific Configuration
+
+Create environment-specific `.env` files:
+
+**`.env.local` (Development)**:
+```env
+NEXTAUTH_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=your-dev-google-client-id
+GITHUB_CLIENT_ID=your-dev-github-client-id
+# Use dev-specific OAuth apps if needed
+```
+
+**`.env.staging`**:
+```env
+NEXTAUTH_URL=https://staging.yourdomain.com
+GOOGLE_CLIENT_ID=your-staging-google-client-id
+GITHUB_CLIENT_ID=your-staging-github-client-id
+```
+
+**`.env.production`**:
+```env
+NEXTAUTH_URL=https://yourdomain.com
+GOOGLE_CLIENT_ID=your-prod-google-client-id
+GITHUB_CLIENT_ID=your-prod-github-client-id
+```
+
+### Development Workarounds
+
+If you can only set one redirect URI per provider:
+
+1. **Use ngrok for local development**:
+   ```bash
+   # Install ngrok
+   npm install -g ngrok
+   
+   # Start your Next.js app
+   pnpm dev
+   
+   # In another terminal, create tunnel
+   ngrok http 3000
+   
+   # Use the ngrok HTTPS URL as your OAuth redirect URI
+   # Example: https://abc123.ngrok.io/api/auth/callback/google
+   ```
+
+2. **Use a development subdomain**:
+   - Set up `dev.yourdomain.com` pointing to your local IP
+   - Use this consistent URL for OAuth callbacks
+
+3. **Environment switching script**:
+   ```bash
+   # Add to package.json scripts
+   "dev:local": "cp .env.local .env && pnpm dev",
+   "dev:tunnel": "cp .env.tunnel .env && pnpm dev"
+   ```
+
 ### Important Notes
 
-- **Redirect URIs must match exactly** - including protocol (http/https)
-- **For production**, update all redirect URIs to use your production domain
+- **Most providers support multiple redirect URIs** - always check first!
 - **Keep your secrets secure** - never commit them to version control
+- **Use separate OAuth apps per environment** for better security
 - **Test each provider** after setup to ensure they work correctly
+- **Document your OAuth setup** for team members
 
 ## Dashboard Features
 
