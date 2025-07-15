@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+.env*.local
+
+# project plan files
+
+# workflow rules
+workflow-rules.md
+plan.md
