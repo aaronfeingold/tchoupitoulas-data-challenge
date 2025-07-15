@@ -47,7 +47,12 @@ A sophisticated data analysis application for exploring Hall of Fame entries wit
    ```
 
 3. **Set up environment variables**:
-   Copy the example environment file and configure:
+   Use the automated setup script:
+   ```bash
+   node scripts/dev-setup.js
+   ```
+   
+   Or manually copy and configure:
    ```bash
    cp env.example .env.local
    ```
@@ -96,6 +101,30 @@ A sophisticated data analysis application for exploring Hall of Fame entries wit
    ```
 
 3. **Open your browser** and navigate to `http://localhost:3000`
+
+## Quick Start for Developers
+
+For the fastest setup experience:
+
+```bash
+# Clone and setup
+git clone <repo> && cd app
+pnpm install
+
+# Automated environment setup (generates .env.local with secret)
+node scripts/dev-setup.js
+
+# Set up database
+pnpm run db:push
+
+# Start development
+pnpm dev
+```
+
+The `dev-setup.js` script will:
+- Copy `env.example` to `.env.local`
+- Generate a secure `NEXTAUTH_SECRET`
+- Provide next steps for OAuth configuration
 
 ## OAuth Provider Setup Guide
 
@@ -226,9 +255,11 @@ If you can only set one redirect URI per provider:
 
 3. **Environment switching script**:
    ```bash
-   # Add to package.json scripts
-   "dev:local": "cp .env.local .env && pnpm dev",
-   "dev:tunnel": "cp .env.tunnel .env && pnpm dev"
+   # Available scripts
+   pnpm run setup:env      # Copy env.example to .env.local
+   pnpm run setup:secret   # Generate NEXTAUTH_SECRET
+   pnpm run dev:local      # Start with local environment  
+   pnpm run dev:tunnel     # Start with ngrok reminder
    ```
 
 ### Important Notes
