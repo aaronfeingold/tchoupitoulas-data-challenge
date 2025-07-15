@@ -3,7 +3,13 @@
 import { useState } from "react";
 import { iceCreamAvatars } from "./ice-cream-avatars";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface AvatarSelectorProps {
   selectedAvatar?: number;
@@ -11,10 +17,10 @@ interface AvatarSelectorProps {
   className?: string;
 }
 
-export function AvatarSelector({ 
-  selectedAvatar = 0, 
+export function AvatarSelector({
+  selectedAvatar = 0,
   onAvatarSelect,
-  className 
+  className,
 }: AvatarSelectorProps) {
   const [previewAvatar, setPreviewAvatar] = useState(selectedAvatar);
 
@@ -50,16 +56,17 @@ export function AvatarSelector({
           {iceCreamAvatars.map((avatar, index) => {
             const Avatar = avatar.component;
             const isSelected = index === previewAvatar;
-            
+
             return (
               <button
                 key={index}
                 onClick={() => handleAvatarClick(index)}
                 className={`
                   p-3 rounded-lg border-2 transition-all duration-200 hover:scale-105
-                  ${isSelected 
-                    ? 'border-primary bg-primary/10 shadow-md' 
-                    : 'border-border hover:border-primary/50'
+                  ${
+                    isSelected
+                      ? "border-primary bg-primary/10 shadow-md"
+                      : "border-border hover:border-primary/50"
                   }
                 `}
                 title={avatar.name}
@@ -72,11 +79,13 @@ export function AvatarSelector({
 
         {/* Save Button */}
         <div className="mt-6 flex justify-center">
-          <Button 
+          <Button
             onClick={() => onAvatarSelect(previewAvatar)}
             disabled={previewAvatar === selectedAvatar}
           >
-            {previewAvatar === selectedAvatar ? 'Current Selection' : 'Save Avatar'}
+            {previewAvatar === selectedAvatar
+              ? "Current Selection"
+              : "Save Avatar"}
           </Button>
         </div>
       </CardContent>

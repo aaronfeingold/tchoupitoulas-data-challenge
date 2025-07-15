@@ -9,7 +9,7 @@ export default withAuth(
       authorized: ({ token, req }) => {
         // Define which routes require authentication
         const { pathname } = req.nextUrl;
-        
+
         // Allow access to auth pages and public routes
         if (
           pathname.startsWith("/api/auth/") ||
@@ -19,7 +19,7 @@ export default withAuth(
         ) {
           return true;
         }
-        
+
         // Require authentication for these routes
         if (
           pathname.startsWith("/profile") ||
@@ -28,11 +28,11 @@ export default withAuth(
         ) {
           return !!token;
         }
-        
+
         return true; // Allow all other routes
       },
     },
-  }
+  },
 );
 
 export const config = {

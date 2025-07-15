@@ -38,7 +38,9 @@ export const users = pgTable("user", {
   favoriteBrand: varchar("favorite_brand", { length: 100 }),
   favoritePlace: varchar("favorite_place", { length: 100 }),
   avatarSelection: integer("avatar_selection").default(0), // 0-7 for 8 ice cream themed avatars
-  emailNotificationsEnabled: boolean("email_notifications_enabled").default(false),
+  emailNotificationsEnabled: boolean("email_notifications_enabled").default(
+    false,
+  ),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -64,7 +66,7 @@ export const accounts = pgTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  })
+  }),
 );
 
 export const sessions = pgTable("session", {
@@ -84,7 +86,7 @@ export const verificationTokens = pgTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
 
 export type HallOfFameEntry = typeof hallOfFameEntries.$inferSelect;

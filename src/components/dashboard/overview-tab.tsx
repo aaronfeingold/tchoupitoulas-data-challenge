@@ -185,7 +185,7 @@ export function OverviewTab() {
                   {(() => {
                     const daysSince = differenceInDays(
                       new Date(),
-                      new Date(dateRange.latest)
+                      new Date(dateRange.latest),
                     );
                     return daysSince === 0
                       ? "Today"

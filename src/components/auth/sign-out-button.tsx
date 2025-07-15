@@ -11,18 +11,18 @@ interface SignOutButtonProps {
   showIcon?: boolean;
 }
 
-export function SignOutButton({ 
+export function SignOutButton({
   variant = "ghost",
-  size = "default", 
+  size = "default",
   className,
-  showIcon = true
+  showIcon = true,
 }: SignOutButtonProps) {
   const handleSignOut = () => {
     signOut({ callbackUrl: "/" });
   };
 
   return (
-    <Button 
+    <Button
       onClick={handleSignOut}
       variant={variant}
       size={size}

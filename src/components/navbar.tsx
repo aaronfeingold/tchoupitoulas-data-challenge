@@ -134,7 +134,7 @@ export function Navbar() {
               <div className="hidden md:block">
                 <UserAvatar />
               </div>
-              
+
               {/* Mobile menu button */}
               <div className="md:hidden">
                 <button

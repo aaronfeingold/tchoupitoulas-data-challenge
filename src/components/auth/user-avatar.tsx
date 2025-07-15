@@ -16,18 +16,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 
-const getAvatarDisplay = (avatarSelection?: number | null, userImage?: string | null) => {
+const getAvatarDisplay = (
+  avatarSelection?: number | null,
+  userImage?: string | null,
+) => {
   if (userImage) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
-      <img 
-        src={userImage} 
-        alt="User Avatar" 
-        className="w-8 h-8 rounded-full"
-      />
+      <img src={userImage} alt="User Avatar" className="w-8 h-8 rounded-full" />
     );
   }
-  
+
   // Use ice cream themed avatar
   const avatarData = getAvatarComponent(avatarSelection || 0);
   const Avatar = avatarData.component;
@@ -38,9 +37,7 @@ export function UserAvatar() {
   const { data: session, status } = useSession();
 
   if (status === "loading") {
-    return (
-      <div className="w-8 h-8 bg-muted rounded-full animate-pulse"></div>
-    );
+    return <div className="w-8 h-8 bg-muted rounded-full animate-pulse"></div>;
   }
 
   if (!session) {
@@ -82,7 +79,11 @@ export function UserAvatar() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="p-0">
-          <SignOutButton variant="ghost" size="sm" className="w-full justify-start" />
+          <SignOutButton
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start"
+          />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

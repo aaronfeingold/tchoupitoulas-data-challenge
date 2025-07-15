@@ -9,9 +9,17 @@ export function VanillaAvatar({ size = 32, ...props }: AvatarProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#FEF3C7" />
-      <path d="M12 8c0-2.2 1.8-4 4-4s4 1.8 4 4v4c0 2.2-1.8 4-4 4s-4-1.8-4-4V8z" fill="#FBBF24" />
+      <path
+        d="M12 8c0-2.2 1.8-4 4-4s4 1.8 4 4v4c0 2.2-1.8 4-4 4s-4-1.8-4-4V8z"
+        fill="#FBBF24"
+      />
       <ellipse cx="16" cy="10" rx="3" ry="2" fill="#FFFFFF" />
-      <path d="M15 16L16 22L17 16" stroke="#D97706" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M15 16L16 22L17 16"
+        stroke="#D97706"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -24,7 +32,12 @@ export function ChocolateAvatar({ size = 32, ...props }: AvatarProps) {
       <circle cx="16" cy="12" r="6" fill="#92400E" />
       <circle cx="14" cy="10" r="1" fill="#451A03" />
       <circle cx="18" cy="11" r="1" fill="#451A03" />
-      <path d="M15 20L16 26L17 20" stroke="#D97706" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M15 20L16 26L17 20"
+        stroke="#D97706"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -35,7 +48,12 @@ export function StrawberryAvatar({ size = 32, ...props }: AvatarProps) {
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#FECACA" />
       <circle cx="16" cy="12" r="6" fill="#F87171" />
-      <path d="M13 8L15 6L17 8L19 6L21 8" stroke="#DC2626" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M13 8L15 6L17 8L19 6L21 8"
+        stroke="#DC2626"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
       <circle cx="16" cy="12" r="1" fill="#FFFFFF" />
       <rect x="13" y="18" width="6" height="8" rx="1" fill="#A3A3A3" />
     </svg>
@@ -51,7 +69,12 @@ export function MintAvatar({ size = 32, ...props }: AvatarProps) {
       <rect x="14" y="10" width="1" height="1" fill="#059669" />
       <rect x="17" y="9" width="1" height="1" fill="#059669" />
       <rect x="15" y="13" width="1" height="1" fill="#059669" />
-      <path d="M15 18L16 24L17 18" stroke="#D97706" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M15 18L16 24L17 18"
+        stroke="#D97706"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -78,7 +101,12 @@ export function CookiesAvatar({ size = 32, ...props }: AvatarProps) {
       <circle cx="14" cy="10" r="1" fill="#1F2937" />
       <circle cx="18" cy="11" r="1" fill="#1F2937" />
       <circle cx="16" cy="14" r="1" fill="#1F2937" />
-      <path d="M15 18L16 24L17 18" stroke="#D97706" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M15 18L16 24L17 18"
+        stroke="#D97706"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -89,7 +117,12 @@ export function BlueMoonAvatar({ size = 32, ...props }: AvatarProps) {
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#DBEAFE" />
       <circle cx="16" cy="12" r="6" fill="#3B82F6" />
-      <path d="M13 10c1-1 2-1 3 0s2 1 3 0" stroke="#1E40AF" strokeWidth="1" fill="none" />
+      <path
+        d="M13 10c1-1 2-1 3 0s2 1 3 0"
+        stroke="#1E40AF"
+        strokeWidth="1"
+        fill="none"
+      />
       <circle cx="16" cy="12" r="1" fill="#FFFFFF" />
       <rect x="13" y="18" width="6" height="8" rx="1" fill="#A3A3A3" />
     </svg>
@@ -102,9 +135,18 @@ export function CaramelAvatar({ size = 32, ...props }: AvatarProps) {
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#FEF3C7" />
       <circle cx="16" cy="12" r="6" fill="#FBBF24" />
-      <path d="M13 9c2 1 4 1 6 0M13 12c2-1 4-1 6 0M13 15c2 1 4 1 6 0" 
-            stroke="#92400E" strokeWidth="1" fill="none" />
-      <path d="M15 18L16 24L17 18" stroke="#D97706" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M13 9c2 1 4 1 6 0M13 12c2-1 4-1 6 0M13 15c2 1 4 1 6 0"
+        stroke="#92400E"
+        strokeWidth="1"
+        fill="none"
+      />
+      <path
+        d="M15 18L16 24L17 18"
+        stroke="#D97706"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -121,6 +163,9 @@ export const iceCreamAvatars = [
 ];
 
 export function getAvatarComponent(index: number) {
-  const avatarIndex = Math.max(0, Math.min(index || 0, iceCreamAvatars.length - 1));
+  const avatarIndex = Math.max(
+    0,
+    Math.min(index || 0, iceCreamAvatars.length - 1),
+  );
   return iceCreamAvatars[avatarIndex];
 }

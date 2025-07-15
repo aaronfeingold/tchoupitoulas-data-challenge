@@ -19,7 +19,7 @@ const providerConfig = {
   },
   github: {
     icon: Github,
-    label: "Continue with GitHub", 
+    label: "Continue with GitHub",
     id: "github",
   },
   facebook: {
@@ -29,11 +29,11 @@ const providerConfig = {
   },
 };
 
-export function SignInButton({ 
-  provider = "google", 
+export function SignInButton({
+  provider = "google",
   variant = "default",
   size = "default",
-  className 
+  className,
 }: SignInButtonProps) {
   const config = providerConfig[provider];
   const Icon = config.icon;
@@ -43,7 +43,7 @@ export function SignInButton({
   };
 
   return (
-    <Button 
+    <Button
       onClick={handleSignIn}
       variant={variant}
       size={size}

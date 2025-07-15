@@ -49,5 +49,5 @@ export function formatElapsedTime(seconds: number): string {
     return `${remainingSeconds}s`;
   }
 
-  return `${minutes}m ${remainingSeconds.toString().padStart(2, '0')}s`;
+  return `${minutes}m ${remainingSeconds.toString().padStart(2, "0")}s`;
 }

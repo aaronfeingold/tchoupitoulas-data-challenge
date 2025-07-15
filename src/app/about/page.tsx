@@ -20,7 +20,7 @@ async function getTchoupitoulas_images() {
     // Filter for image files only
     const imageExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
     const imageFiles = files.filter((file) =>
-      imageExtensions.some((ext) => file.toLowerCase().endsWith(ext))
+      imageExtensions.some((ext) => file.toLowerCase().endsWith(ext)),
     );
 
     // Return the full paths for the public directory

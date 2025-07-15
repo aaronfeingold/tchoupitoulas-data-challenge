@@ -3,7 +3,13 @@
 import { useSession } from "next-auth/react";
 import { ReactNode } from "react";
 import { SignInOptions } from "./sign-in-button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -11,10 +17,10 @@ interface ProtectedRouteProps {
   requireAuth?: boolean;
 }
 
-export function ProtectedRoute({ 
-  children, 
+export function ProtectedRoute({
+  children,
   fallback,
-  requireAuth = true 
+  requireAuth = true,
 }: ProtectedRouteProps) {
   const { data: session, status } = useSession();
 
@@ -51,9 +57,9 @@ export function ProtectedRoute({
   return <>{children}</>;
 }
 
-export function AuthPrompt({ 
+export function AuthPrompt({
   title = "Sign in to unlock features",
-  description = "Create an account to access enhanced analytics, ML predictions, and personalized content."
+  description = "Create an account to access enhanced analytics, ML predictions, and personalized content.",
 }: {
   title?: string;
   description?: string;

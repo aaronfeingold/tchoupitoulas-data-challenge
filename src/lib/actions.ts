@@ -44,7 +44,7 @@ export const getAllEntries = unstable_cache(
   {
     tags: [CACHE_TAGS.ALL_ENTRIES],
     revalidate: CACHE_DURATION,
-  }
+  },
 );
 
 export const getYearlyTotals = unstable_cache(
@@ -69,7 +69,7 @@ export const getYearlyTotals = unstable_cache(
   {
     tags: [CACHE_TAGS.YEARLY_TOTALS],
     revalidate: CACHE_DURATION,
-  }
+  },
 );
 
 export const getMonthlyTotals = unstable_cache(
@@ -79,9 +79,9 @@ export const getMonthlyTotals = unstable_cache(
         ? and(
             gte(
               hallOfFameEntries.parsedDate,
-              startOfYear(new Date(year, 0, 1))
+              startOfYear(new Date(year, 0, 1)),
             ),
-            lte(hallOfFameEntries.parsedDate, endOfYear(new Date(year, 0, 1)))
+            lte(hallOfFameEntries.parsedDate, endOfYear(new Date(year, 0, 1))),
           )
         : undefined;
 
@@ -95,11 +95,11 @@ export const getMonthlyTotals = unstable_cache(
         .where(yearFilter)
         .groupBy(
           sql`EXTRACT(YEAR FROM ${hallOfFameEntries.parsedDate})`,
-          sql`EXTRACT(MONTH FROM ${hallOfFameEntries.parsedDate})`
+          sql`EXTRACT(MONTH FROM ${hallOfFameEntries.parsedDate})`,
         )
         .orderBy(
           asc(sql`EXTRACT(YEAR FROM ${hallOfFameEntries.parsedDate})`),
-          asc(sql`EXTRACT(MONTH FROM ${hallOfFameEntries.parsedDate})`)
+          asc(sql`EXTRACT(MONTH FROM ${hallOfFameEntries.parsedDate})`),
         );
 
       return { success: true, data: result };
@@ -112,7 +112,7 @@ export const getMonthlyTotals = unstable_cache(
   {
     tags: [CACHE_TAGS.MONTHLY_TOTALS],
     revalidate: CACHE_DURATION,
-  }
+  },
 );
 
 // TODO: This is not used anywhere, but it will be used soon..
@@ -131,8 +131,8 @@ export const getDailyTotalsForMonth = unstable_cache(
         .where(
           and(
             gte(hallOfFameEntries.parsedDate, startDate),
-            lte(hallOfFameEntries.parsedDate, endDate)
-          )
+            lte(hallOfFameEntries.parsedDate, endDate),
+          ),
         )
         .groupBy(sql`DATE(${hallOfFameEntries.parsedDate})`)
         .orderBy(asc(sql`DATE(${hallOfFameEntries.parsedDate})`));
@@ -161,7 +161,7 @@ export const getDailyTotalsForMonth = unstable_cache(
   {
     tags: [CACHE_TAGS.DAILY_TOTALS],
     revalidate: CACHE_DURATION,
-  }
+  },
 );
 
 export const getTopHallOfFamers = unstable_cache(
@@ -194,7 +194,7 @@ export const getTopHallOfFamers = unstable_cache(
   {
     tags: [CACHE_TAGS.NAMES],
     revalidate: CACHE_DURATION,
-  }
+  },
 );
 
 // TODO: This is not used anywhere, but it will be used to analyze names...
@@ -222,7 +222,7 @@ export const getUniqueNames = unstable_cache(
   {
     tags: [CACHE_TAGS.NAMES],
     revalidate: CACHE_DURATION,
-  }
+  },
 );
 
 // TODO: This is not used anywhere, but it will be used to analyze names...
@@ -245,7 +245,7 @@ export const getEntriesForName = unstable_cache(
   {
     tags: [CACHE_TAGS.ALL_ENTRIES],
     revalidate: CACHE_DURATION,
-  }
+  },
 );
 
 export const getLongestGap = unstable_cache(
@@ -276,7 +276,8 @@ export const getLongestGap = unstable_cache(
         const currentDate = new Date(dates[i].date);
         const gap =
           Math.floor(
-            (currentDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)
+            (currentDate.getTime() - prevDate.getTime()) /
+              (1000 * 60 * 60 * 24),
           ) - 1;
 
         if (gap > longestGap) {
@@ -303,7 +304,7 @@ export const getLongestGap = unstable_cache(
   {
     tags: [CACHE_TAGS.STATS],
     revalidate: CACHE_DURATION,
-  }
+  },
 );
 
 export const getLongestStreak = unstable_cache(
@@ -335,7 +336,7 @@ export const getLongestStreak = unstable_cache(
         const prevDate = new Date(dates[i - 1].date);
         const currentDate = new Date(dates[i].date);
         const dayDiff = Math.floor(
-          (currentDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)
+          (currentDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24),
         );
 
         if (dayDiff === 1) {
@@ -377,7 +378,7 @@ export const getLongestStreak = unstable_cache(
   {
     tags: [CACHE_TAGS.STATS],
     revalidate: CACHE_DURATION,
-  }
+  },
 );
 
 // Utility function to revalidate all caches when data changes
@@ -413,7 +414,7 @@ export const getYoungest = unstable_cache(
   {
     tags: [CACHE_TAGS.STATS],
     revalidate: CACHE_DURATION,
-  }
+  },
 );
 
 export const getFastest = unstable_cache(
@@ -440,5 +441,5 @@ export const getFastest = unstable_cache(
   {
     tags: [CACHE_TAGS.STATS],
     revalidate: CACHE_DURATION,
-  }
+  },
 );
