@@ -8,6 +8,13 @@
       "when": 1751605432482,
       "tag": "0000_easy_imperial_guard",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1752554656282,
+      "tag": "0001_modern_rocket_raccoon",
+      "breakpoints": true
     }
   ]
 }
