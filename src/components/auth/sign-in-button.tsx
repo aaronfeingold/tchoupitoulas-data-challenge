@@ -2,10 +2,10 @@
 
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { Github, Chrome, Facebook } from "lucide-react";
+import { Github, Chrome } from "lucide-react";
 
 interface SignInButtonProps {
-  provider?: "google" | "github" | "facebook";
+  provider?: "google" | "github";
   variant?: "default" | "outline" | "ghost";
   size?: "sm" | "default" | "lg";
   className?: string;
@@ -21,11 +21,6 @@ const providerConfig = {
     icon: Github,
     label: "Continue with GitHub",
     id: "github",
-  },
-  facebook: {
-    icon: Facebook,
-    label: "Continue with Facebook",
-    id: "facebook",
   },
 };
 
@@ -60,7 +55,6 @@ export function SignInOptions() {
     <div className="space-y-3">
       <SignInButton provider="google" />
       <SignInButton provider="github" variant="outline" />
-      <SignInButton provider="facebook" variant="outline" />
     </div>
   );
 }

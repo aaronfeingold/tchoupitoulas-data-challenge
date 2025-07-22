@@ -4,7 +4,7 @@ A sophisticated data analysis application for exploring Hall of Fame entries wit
 
 ## Features
 
-- **Authentication System**: OAuth login with Google, GitHub, and Facebook
+- **Authentication System**: OAuth login with Google and GitHub
 - **User Profiles**: Custom ice cream themed avatars and profile management
 - **Data Explorer**: Browse through all Hall of Fame entries with powerful filtering and search
 - **Interactive Charts**: Yearly totals (bar chart) and monthly trends (line chart)
@@ -71,14 +71,11 @@ A sophisticated data analysis application for exploring Hall of Fame entries wit
    GOOGLE_CLIENT_SECRET="your-google-client-secret"
    GITHUB_CLIENT_ID="your-github-client-id"
    GITHUB_CLIENT_SECRET="your-github-client-secret"
-   FACEBOOK_CLIENT_ID="your-facebook-client-id"
-   FACEBOOK_CLIENT_SECRET="your-facebook-client-secret"
    ```
 
 4. **Set up OAuth providers** (see detailed guide below):
    - Configure Google OAuth in Google Cloud Console
    - Set up GitHub OAuth app in GitHub Settings
-   - Create Facebook app in Facebook Developers
 
 5. **Set up the database**:
    Run database migrations to create all required tables:
@@ -158,20 +155,6 @@ To enable authentication, you need to configure OAuth applications with each pro
 5. **Copy the Client ID and generate a Client Secret**
 6. **Add them to your `.env.local` file**
 
-### Facebook OAuth Setup
-
-1. **Go to Facebook Developers**: https://developers.facebook.com/
-2. **Create a new app** > "Consumer" type
-3. **Add Facebook Login product**:
-   - Go to "Products" > "Facebook Login" > "Settings"
-   - Add Valid OAuth Redirect URIs:
-     - Development: `http://localhost:3000/api/auth/callback/facebook`
-     - Production: `https://yourdomain.com/api/auth/callback/facebook`
-4. **Get your credentials**:
-   - Go to "Settings" > "Basic"
-   - Copy App ID and App Secret
-5. **Add them to your `.env.local` file**
-
 ### Generate NextAuth Secret
 
 Generate a secure secret for NextAuth.js:
@@ -200,9 +183,6 @@ Most OAuth providers allow multiple redirect URIs, making local development easi
   - "MyApp - Production" (production domain callback)
 - **Option 2**: GitHub allows multiple callback URLs in a single app
 
-#### Facebook OAuth - Multiple Platforms
-- In Facebook app settings, you can add multiple Valid OAuth Redirect URIs
-- Add all your environments at once
 
 ### Environment-Specific Configuration
 
