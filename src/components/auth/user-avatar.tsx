@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { SignOutButton } from "./sign-out-button";
-import { SignInButton } from "./sign-in-button";
+import { NavigateToSignInButton } from "./sign-in-button";
 import { User, Settings } from "lucide-react";
 import { getAvatarComponent } from "@/components/avatars/ice-cream-avatars";
 import {
@@ -41,7 +41,7 @@ export function UserAvatar() {
   }
 
   if (!session) {
-    return <SignInButton variant="outline" size="sm" />;
+    return <NavigateToSignInButton variant="outline" size="sm" />;
   }
 
   const user = session.user;

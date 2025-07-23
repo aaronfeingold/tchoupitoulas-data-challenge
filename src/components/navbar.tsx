@@ -79,9 +79,9 @@ export function Navbar() {
     >
       <div className="bg-gradient-to-r from-emerald-100/70 to-pink-100/70 backdrop-blur-md border-b border-border/40">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="grid grid-cols-2 md:grid-cols-3 items-center h-16">
             {/* Left side - Tchoup Data image */}
-            <div className="flex items-center">
+            <div className="flex justify-start">
               <button
                 onClick={handleHomeClick}
                 className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
@@ -96,8 +96,8 @@ export function Navbar() {
               </button>
             </div>
 
-            {/* Center - Navigation links (desktop only) */}
-            <div className="hidden md:flex items-center space-x-6">
+            {/* Center - Navigation links (desktop only) - truly centered */}
+            <div className="hidden md:flex items-center justify-center space-x-6">
               <Link
                 href="/"
                 className={`text-sm font-medium transition-colors hover:text-emerald-700 ${
@@ -129,8 +129,8 @@ export function Navbar() {
             </div>
 
             {/* Right side - User avatar and mobile menu */}
-            <div className="flex items-center space-x-3">
-              {/* User Avatar - always visible */}
+            <div className="flex items-center justify-end space-x-3">
+              {/* User Avatar - always visible on desktop */}
               <div className="hidden md:block">
                 <UserAvatar />
               </div>
