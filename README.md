@@ -123,6 +123,31 @@ The `dev-setup.js` script will:
 - Generate a secure `NEXTAUTH_SECRET`
 - Provide next steps for OAuth configuration
 
+## Adding UI Components (shadcn/ui)
+
+This project uses shadcn/ui for the component library. To add new components:
+
+### Install a new component:
+```bash
+npx shadcn@latest add [component-name]
+```
+
+### Example:
+```bash
+# Form components
+npx shadcn@latest add form
+```
+
+### See all available components:
+```bash
+npx shadcn@latest add
+```
+
+This will show you a list of all available components you can install.
+
+### Component Configuration
+Components are automatically added to `src/components/ui/` with proper TypeScript types and Tailwind styling. The configuration is managed in `components.json`.
+
 ## OAuth Provider Setup Guide
 
 To enable authentication, you need to configure OAuth applications with each provider:
