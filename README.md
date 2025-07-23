@@ -250,6 +250,24 @@ If you can only set one redirect URI per provider:
 - **Test each provider** after setup to ensure they work correctly
 - **Document your OAuth setup** for team members
 
+## Troubleshooting
+
+### NextAuth JWT Decryption Error
+
+If you encounter a `JWEDecryptionFailed: decryption operation failed` error, this is usually caused by stale session cookies in your browser.
+
+**Quick Fix**:
+- Clear your browser cache/cookies for `localhost:3000`
+- Or test in an incognito/private browser window
+
+**Why this happens**: The browser has old session cookies encrypted with a different `NEXTAUTH_SECRET` that can't be decrypted with your current secret.
+
+**If the problem persists**:
+1. Generate a new `NEXTAUTH_SECRET`: `openssl rand -base64 32`
+2. Update your `.env.local` file
+3. Restart your development server
+4. Clear browser cache again
+
 ## Dashboard Features
 
 ### Overview Tab
