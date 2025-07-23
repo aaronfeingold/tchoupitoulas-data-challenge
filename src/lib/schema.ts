@@ -26,7 +26,7 @@ export const hallOfFameEntries = pgTable("hall_of_fame_entries", {
 
 // NextAuth.js required tables
 export const users = pgTable("user", {
-  id: text("id").notNull().primaryKey(),
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   name: text("name"),
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
@@ -48,7 +48,7 @@ export const users = pgTable("user", {
 export const accounts = pgTable(
   "account",
   {
-    userId: text("userId")
+    userId: integer("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     type: text("type").$type<AdapterAccount["type"]>().notNull(),
@@ -71,7 +71,7 @@ export const accounts = pgTable(
 
 export const sessions = pgTable("session", {
   sessionToken: text("sessionToken").notNull().primaryKey(),
-  userId: text("userId")
+  userId: integer("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expires: timestamp("expires", { mode: "date" }).notNull(),
