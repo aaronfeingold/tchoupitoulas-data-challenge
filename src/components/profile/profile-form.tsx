@@ -9,10 +9,11 @@ import { AvatarSection } from "./avatar-section";
 import { Save, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { updateUserProfile } from "@/lib/actions";
+import { UserProfile } from "@/types/user";
 
 interface ProfileFormProps {
   onSave: () => void;
-  initialData?: any;
+  initialData?: UserProfile | null;
 }
 
 export function ProfileForm({ onSave, initialData }: ProfileFormProps) {
