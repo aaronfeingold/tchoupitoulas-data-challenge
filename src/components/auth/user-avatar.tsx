@@ -1,6 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { SignOutButton } from "./sign-out-button";
 import { NavigateToSignInButton } from "./sign-in-button";
@@ -18,19 +19,37 @@ import Link from "next/link";
 
 const getAvatarDisplay = (
   avatarSelection?: number | null,
-  userImage?: string | null,
+  userImage?: string | null
 ) => {
+  // Priority: 1. Ice cream avatar selection, 2. User profile image, 3. Tchoup Sundae fallback
+  if (avatarSelection !== null && avatarSelection !== undefined) {
+    const avatarData = getAvatarComponent(avatarSelection);
+    const Avatar = avatarData.component;
+    return <Avatar size={32} />;
+  }
+
   if (userImage) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img src={userImage} alt="User Avatar" className="w-8 h-8 rounded-full" />
+      <Image
+        src={userImage}
+        alt="User Avatar"
+        width={32}
+        height={32}
+        className="w-8 h-8 rounded-full"
+      />
     );
   }
 
-  // Use ice cream themed avatar
-  const avatarData = getAvatarComponent(avatarSelection || 0);
-  const Avatar = avatarData.component;
-  return <Avatar size={32} />;
+  // Tchoup Sundae fallback
+  return (
+    <Image
+      src="/Tchoup-Sundae-128x128.png"
+      alt="User Avatar"
+      width={32}
+      height={32}
+      className="w-8 h-8 rounded-full object-cover bg-background"
+    />
+  );
 };
 
 export function UserAvatar() {
@@ -41,19 +60,52 @@ export function UserAvatar() {
   }
 
   if (!session) {
-    return <NavigateToSignInButton variant="outline" size="sm" />;
+    return (
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="relative h-8 w-8 rounded-full p-0 overflow-visible"
+          >
+            {getAvatarDisplay(null, null)}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className="w-56"
+          align="end"
+          forceMount
+          sideOffset={4}
+        >
+          <DropdownMenuItem className="p-0">
+            <NavigateToSignInButton
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start"
+            />
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
   }
 
   const user = session.user;
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          {getAvatarDisplay(null, user?.image)}
+        <Button
+          variant="ghost"
+          className="relative h-8 w-8 rounded-full p-0 overflow-visible"
+        >
+          {getAvatarDisplay(user?.avatarSelection, user?.image)}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent
+        className="w-56"
+        align="end"
+        forceMount
+        sideOffset={4}
+      >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
@@ -72,7 +124,7 @@ export function UserAvatar() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/settings" className="cursor-pointer">
+          <Link href="/profile/settings" className="cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
             Settings
           </Link>
