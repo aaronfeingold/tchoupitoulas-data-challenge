@@ -6,9 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getAvatarComponent } from "@/components/avatars/ice-cream-avatars";
 import { Mail, MapPin, IceCream } from "lucide-react";
+import { UserProfile } from "@/types/user";
 
 interface ProfileDisplayProps {
-  profileData?: any;
+  profileData?: UserProfile | null;
 }
 
 export const ProfileDisplay = React.memo(function ProfileDisplay({
