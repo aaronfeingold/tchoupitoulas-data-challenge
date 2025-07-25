@@ -2,7 +2,6 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   Card,
@@ -84,7 +83,7 @@ export default function AuthErrorPage() {
                 {error === "Configuration" && (
                   <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
                     <p className="text-sm text-yellow-800">
-                      If you're a developer, check your OAuth configuration and environment variables.
+                      If you&apos;re a developer, check your OAuth configuration and environment variables.
                     </p>
                   </div>
                 )}
