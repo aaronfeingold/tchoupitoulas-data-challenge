@@ -7,33 +7,34 @@ import { ProfileForm } from "@/components/profile/profile-form";
 import { Button } from "@/components/ui/button";
 import { Edit, X } from "lucide-react";
 import { getUserProfile } from "@/lib/actions";
-import { UserProfile } from "@/types/user";
+import { User } from "@/lib/schema";
 
 export default function ProfilePage() {
   const { data: session } = useSession();
   const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState<UserProfile | null>(null);
+  const [profileData, setProfileData] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch profile data when session is available
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (!session?.user) return;
+  // Shared profile loading logic
+  const loadProfile = async (showLoading = false) => {
+    if (!session?.user) return;
 
-      setIsLoading(true);
-      try {
-        const result = await getUserProfile();
-        if (result.success && 'data' in result && result.data) {
-          setProfileData(result.data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch profile:", error);
-      } finally {
-        setIsLoading(false);
+    if (showLoading) setIsLoading(true);
+
+    try {
+      const result = await getUserProfile();
+      if (result.success && "data" in result) {
+        setProfileData(result.data as User);
       }
-    };
+    } catch (error) {
+      console.error("Failed to load profile:", error);
+    } finally {
+      if (showLoading) setIsLoading(false);
+    }
+  };
 
-    fetchProfile();
+  useEffect(() => {
+    loadProfile(true);
   }, [session?.user]);
 
   if (!session) {
@@ -81,14 +82,9 @@ export default function ProfilePage() {
       {isEditing ? (
         <ProfileForm
           initialData={profileData}
-          onSave={() => {
+          onSave={async () => {
             setIsEditing(false);
-            // Refetch profile data after save
-            if (session?.user) {
-              getUserProfile().then((result) => {
-                if (result.success && 'data' in result && result.data) setProfileData(result.data);
-              });
-            }
+            await loadProfile(false);
           }}
         />
       ) : (
