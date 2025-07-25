@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +18,6 @@ import { toast } from "sonner";
 import { deleteUserAccount, exportUserData } from "@/lib/actions";
 
 export function PrivacySettings() {
-  const { data: session } = useSession();
   const [isExporting, setIsExporting] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
@@ -178,7 +176,7 @@ export function PrivacySettings() {
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <h4 className="font-medium text-blue-900 mb-2">
-              What's included in your data export:
+              What&apos;s included in your data export:
             </h4>
             <ul className="text-sm text-blue-800 space-y-1">
               <li>
