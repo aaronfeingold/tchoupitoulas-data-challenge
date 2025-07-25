@@ -69,7 +69,7 @@ export default function AuthErrorPage() {
               <CardContent className="space-y-4">
                 <div className="flex flex-col space-y-3">
                   <Button asChild className="w-full">
-                    <Link href="/sign-in">
+                    <Link href="/auth/sign-in">
                       <RefreshCw className="h-4 w-4 mr-2" />
                       Try Again
                     </Link>
