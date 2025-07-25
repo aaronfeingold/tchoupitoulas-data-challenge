@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1751605432482,
-      "tag": "0000_easy_imperial_guard",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1752554656282,
-      "tag": "0001_modern_rocket_raccoon",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1753238944953,
-      "tag": "0002_oval_malcolm_colcord",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1753239666932,
-      "tag": "0003_chunky_hellfire_club",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1753239759792,
-      "tag": "0004_luxuriant_slipstream",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1753239883792,
-      "tag": "0005_rare_morlun",
+      "when": 1753478387933,
+      "tag": "0000_normal_switch",
       "breakpoints": true
     }
   ]
