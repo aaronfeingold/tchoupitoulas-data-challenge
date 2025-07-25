@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { SignOutButton } from "./sign-out-button";
 import { NavigateToSignInButton } from "./sign-in-button";
-import { User, Settings } from "lucide-react";
+import { User as UserIcon, Settings } from "lucide-react";
 import { getAvatarComponent } from "@/components/avatars/ice-cream-avatars";
 import {
   DropdownMenu,
@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { useUserProfile } from "@/contexts/user-profile-context";
 
 const getAvatarDisplay = ({
   avatarSelection,
@@ -46,6 +47,7 @@ const getAvatarDisplay = ({
 
 export function UserAvatar() {
   const { data: session, status } = useSession();
+  const { profileData } = useUserProfile();
 
   if (status === "loading") {
     return <div className="w-8 h-8 bg-muted rounded-full animate-pulse"></div>;
@@ -90,8 +92,8 @@ export function UserAvatar() {
           className="relative h-8 w-8 rounded-full p-0 overflow-visible"
         >
           {getAvatarDisplay({
-            avatarSelection: user?.avatarSelection ?? null,
-            userImage: user?.image,
+            avatarSelection: profileData?.avatarSelection ?? null,
+            userImage: user?.image ?? null,
           })}
         </Button>
       </DropdownMenuTrigger>
@@ -114,7 +116,7 @@ export function UserAvatar() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/profile" className="cursor-pointer">
-            <User className="mr-2 h-4 w-4" />
+            <UserIcon className="mr-2 h-4 w-4" />
             Profile
           </Link>
         </DropdownMenuItem>

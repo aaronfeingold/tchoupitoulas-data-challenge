@@ -1,41 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { ProfileDisplay } from "@/components/profile/profile-display";
 import { ProfileForm } from "@/components/profile/profile-form";
 import { Button } from "@/components/ui/button";
 import { Edit, X } from "lucide-react";
-import { getUserProfile } from "@/lib/actions";
-import { User } from "@/lib/schema";
+import { useUserProfile } from "@/contexts/user-profile-context";
 
 export default function ProfilePage() {
   const { data: session } = useSession();
+  const { profileData, isLoading, refreshProfile } = useUserProfile();
   const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Shared profile loading logic
-  const loadProfile = async (showLoading = false) => {
-    if (!session?.user) return;
-
-    if (showLoading) setIsLoading(true);
-
-    try {
-      const result = await getUserProfile();
-      if (result.success && "data" in result) {
-        setProfileData(result.data as User);
-      }
-    } catch (error) {
-      console.error("Failed to load profile:", error);
-    } finally {
-      if (showLoading) setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadProfile(true);
-  }, [session?.user]);
 
   if (!session) {
     return (
@@ -84,7 +60,7 @@ export default function ProfilePage() {
           initialData={profileData}
           onSave={async () => {
             setIsEditing(false);
-            await loadProfile(false);
+            await refreshProfile();
           }}
         />
       ) : (
