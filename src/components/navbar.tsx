@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, Home, LayoutPanelTop } from "lucide-react";
+import { BookOpen, Home, LayoutPanelTop, User } from "lucide-react";
 import { UserAvatar } from "./auth/user-avatar";
 
 export function Navbar() {
@@ -13,6 +14,7 @@ export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const { data: session } = useSession();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -80,15 +82,31 @@ export function Navbar() {
       <div className="bg-gradient-to-r from-emerald-100/70 to-pink-100/70 backdrop-blur-md border-b border-border/40">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-3 items-center h-16">
-            {/* Left side - Tchoup Data image */}
+            {/* Left side - Tchoup Data image (desktop: home, mobile: menu) */}
             <div className="flex justify-start">
+              {/* Desktop: Home button */}
               <button
                 onClick={handleHomeClick}
-                className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+                className="hidden md:flex items-center space-x-2 hover:opacity-80 transition-opacity"
               >
                 <Image
                   src="/Tchoup-Data-128x128.png"
                   alt="Tchoup Data"
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 object-contain"
+                />
+              </button>
+              
+              {/* Mobile: Menu trigger */}
+              <button
+                data-mobile-menu-button
+                onClick={toggleMobileMenu}
+                className="md:hidden flex items-center space-x-2 hover:opacity-80 transition-opacity"
+              >
+                <Image
+                  src="/Tchoup-Data-128x128.png"
+                  alt="Menu"
                   width={32}
                   height={32}
                   className="w-8 h-8 object-contain"
@@ -126,31 +144,24 @@ export function Navbar() {
               >
                 About
               </Link>
+              {session && (
+                <Link
+                  href="/profile"
+                  className={`text-sm font-medium transition-colors hover:text-emerald-700 ${
+                    isActive("/profile") || pathname.startsWith("/profile")
+                      ? "text-emerald-800"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  Profile
+                </Link>
+              )}
             </div>
 
-            {/* Right side - User avatar and mobile menu */}
+            {/* Right side - User avatar */}
             <div className="flex items-center justify-end space-x-3">
-              {/* User Avatar - always visible on desktop */}
-              <div className="hidden md:block">
-                <UserAvatar />
-              </div>
-
-              {/* Mobile menu button */}
-              <div className="md:hidden">
-                <button
-                  data-mobile-menu-button
-                  onClick={toggleMobileMenu}
-                  className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
-                >
-                  <Image
-                    src="/Tchoup-Sundae-128x128.png"
-                    alt="Menu"
-                    width={32}
-                    height={32}
-                    className="w-8 h-8 object-contain"
-                  />
-                </button>
-              </div>
+              {/* User Avatar - always visible */}
+              <UserAvatar />
             </div>
           </div>
 
@@ -195,6 +206,18 @@ export function Navbar() {
                 >
                   <BookOpen className="h-4 w-4 mr-2" /> About
                 </button>
+                {session && (
+                  <button
+                    className={`flex items-center block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
+                      isActive("/profile") || pathname.startsWith("/profile")
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-primary hover:bg-primary/5"
+                    }`}
+                    onClick={() => handleLinkClick("/profile")}
+                  >
+                    <User className="h-4 w-4 mr-2" /> Profile
+                  </button>
+                )}
               </div>
             </div>
           )}
