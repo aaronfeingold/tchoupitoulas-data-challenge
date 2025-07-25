@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { hallOfFameEntries, users } from "@/lib/schema";
+import { hallOfFameEntries, users, type User } from "@/lib/schema";
 import { sql, desc, asc, count, eq, and, gte, lte } from "drizzle-orm";
 import {
   startOfYear,
@@ -484,7 +484,7 @@ export async function updateUserProfile(formData: FormData) {
 
     // Remove undefined values
     const cleanedData = Object.fromEntries(
-      Object.entries(updateData).filter(([_, value]) => value !== undefined)
+      Object.entries(updateData).filter(([, value]) => value !== undefined)
     );
 
     if (Object.keys(cleanedData).length === 0) {
@@ -524,7 +524,7 @@ const getUserProfileCached = unstable_cache(
         return { success: false, error: "User not found" };
       }
 
-      return { success: true, data: user[0] };
+      return { success: true, data: user[0] as User };
     } catch (error) {
       console.error("Error fetching user profile:", error);
       return { success: false, error: "Failed to fetch user profile" };
@@ -594,12 +594,12 @@ export async function exportUserData() {
     // Get user profile data
     const userResult = await getUserProfile(userId);
     if (!userResult.success) {
-      return userResult;
+      return { success: false, error: userResult.error };
     }
 
     // Create comprehensive data export
     const exportData = {
-      profile: userResult.data,
+      profile: (userResult as { success: true; data: User }).data,
       exportInfo: {
         exportedAt: new Date().toISOString(),
         exportedBy: userId,
