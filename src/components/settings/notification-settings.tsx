@@ -80,7 +80,7 @@ export function NotificationSettings() {
               <div className="text-sm text-blue-800">
                 <p className="font-medium">Email System Coming Soon</p>
                 <p className="mt-1">
-                  We're working on implementing a comprehensive email notification system. 
+                  We&apos;re working on implementing a comprehensive email notification system. 
                   This feature will be available in a future update and will include:
                 </p>
                 <ul className="mt-2 ml-4 list-disc space-y-1">
