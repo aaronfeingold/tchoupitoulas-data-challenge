@@ -17,10 +17,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 
-const getAvatarDisplay = (
-  avatarSelection?: number | null,
-  userImage?: string | null
-) => {
+const getAvatarDisplay = ({
+  avatarSelection,
+  userImage,
+}: {
+  avatarSelection: number | null;
+  userImage: string | null;
+}) => {
   // Priority: 1. Ice cream avatar selection, 2. User profile image, 3. Tchoup Sundae fallback
   if (avatarSelection !== null && avatarSelection !== undefined) {
     const avatarData = getAvatarComponent(avatarSelection);
@@ -31,25 +34,14 @@ const getAvatarDisplay = (
   if (userImage) {
     return (
       <Image
-        src={userImage}
+        src={userImage ?? "/Tchoup-Sundae-128x128.png"}
         alt="User Avatar"
         width={32}
         height={32}
-        className="w-8 h-8 rounded-full"
+        className={`w-8 h-8 rounded-full ${userImage && "object-cover bg-background"}`}
       />
     );
   }
-
-  // Tchoup Sundae fallback
-  return (
-    <Image
-      src="/Tchoup-Sundae-128x128.png"
-      alt="User Avatar"
-      width={32}
-      height={32}
-      className="w-8 h-8 rounded-full object-cover bg-background"
-    />
-  );
 };
 
 export function UserAvatar() {
@@ -67,7 +59,7 @@ export function UserAvatar() {
             variant="ghost"
             className="relative h-8 w-8 rounded-full p-0 overflow-visible"
           >
-            {getAvatarDisplay(null, null)}
+            {getAvatarDisplay({ avatarSelection: null, userImage: null })}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
@@ -97,7 +89,10 @@ export function UserAvatar() {
           variant="ghost"
           className="relative h-8 w-8 rounded-full p-0 overflow-visible"
         >
-          {getAvatarDisplay(user?.avatarSelection, user?.image)}
+          {getAvatarDisplay({
+            avatarSelection: user?.avatarSelection ?? null,
+            userImage: user?.image,
+          })}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
