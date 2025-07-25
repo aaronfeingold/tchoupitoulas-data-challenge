@@ -116,6 +116,48 @@ export default async function AboutPage() {
           </Card>
         </div>
 
+        {/* Member Benefits Section */}
+        <div className="mb-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gradient mb-4">
+              Member Benefits
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Sign in to unlock enhanced features and get the most out of your data exploration experience
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card className="glass-effect hover-lift">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <TrendingUp className="h-6 w-6 mr-2" />
+                  Enhanced Analytics
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-base">
+                  Access advanced data visualizations, personalized dashboards, and deeper insights into Hall of Fame trends. Track your favorite challengers and get notified of new records.
+                </CardDescription>
+              </CardContent>
+            </Card>
+
+            <Card className="glass-effect hover-lift">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Users className="h-6 w-6 mr-2" />
+                  Personalized Insights
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-base">
+                  Get customized data recommendations, save your favorite searches, and create personal data collections. Your preferences shape your unique analytics experience.
+                </CardDescription>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           <Card className="glass-effect hover-lift">
