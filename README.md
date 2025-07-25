@@ -16,6 +16,16 @@ A sophisticated data analysis application for exploring Hall of Fame entries wit
 - **Modern UI**: Beautiful, responsive design with glass morphism effects
 - **Fun Theme**: Ice cream shop inspired design with mint and pink color palette
 
+## Environment Variables
+
+The application requires several environment variables for proper configuration:
+
+- **`NEXT_PUBLIC_BASE_URL`**: Base URL for the application, used for metadata and social sharing. Should be set to your domain in production (e.g., `https://yourdomain.com`) and `http://localhost:3000` for development.
+- **`DATABASE_URL`**: PostgreSQL connection string
+- **`NEXTAUTH_SECRET`**: Secret key for NextAuth.js session encryption
+- **`NEXTAUTH_URL`**: Your application URL for NextAuth.js
+- **OAuth credentials**: Client IDs and secrets for Google and GitHub authentication
+
 ## Tech Stack
 
 - **Framework**: Next.js 15+ with App Router
@@ -65,6 +75,9 @@ A sophisticated data analysis application for exploring Hall of Fame entries wit
    # NextAuth.js Configuration
    NEXTAUTH_SECRET="your-secret-key-here"  # Generate with: openssl rand -base64 32
    NEXTAUTH_URL="http://localhost:3000"
+   
+   # App Configuration
+   NEXT_PUBLIC_BASE_URL="http://localhost:3000"  # Base URL for metadata and social sharing
    
    # OAuth Provider Credentials (see setup guide below)
    GOOGLE_CLIENT_ID="your-google-client-id"
@@ -216,6 +229,7 @@ Create environment-specific `.env` files:
 **`.env.local` (Development)**:
 ```env
 NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
 GOOGLE_CLIENT_ID=your-dev-google-client-id
 GITHUB_CLIENT_ID=your-dev-github-client-id
 # Use dev-specific OAuth apps if needed
@@ -224,6 +238,7 @@ GITHUB_CLIENT_ID=your-dev-github-client-id
 **`.env.staging`**:
 ```env
 NEXTAUTH_URL=https://staging.yourdomain.com
+NEXT_PUBLIC_BASE_URL=https://staging.yourdomain.com
 GOOGLE_CLIENT_ID=your-staging-google-client-id
 GITHUB_CLIENT_ID=your-staging-github-client-id
 ```
@@ -231,6 +246,7 @@ GITHUB_CLIENT_ID=your-staging-github-client-id
 **`.env.production`**:
 ```env
 NEXTAUTH_URL=https://yourdomain.com
+NEXT_PUBLIC_BASE_URL=https://yourdomain.com
 GOOGLE_CLIENT_ID=your-prod-google-client-id
 GITHUB_CLIENT_ID=your-prod-github-client-id
 ```
