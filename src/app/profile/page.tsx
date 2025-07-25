@@ -5,13 +5,14 @@ import { useSession } from "next-auth/react";
 import { ProfileDisplay } from "@/components/profile/profile-display";
 import { ProfileForm } from "@/components/profile/profile-form";
 import { Button } from "@/components/ui/button";
-import { Edit, Save, X } from "lucide-react";
+import { Edit, X } from "lucide-react";
 import { getUserProfile } from "@/lib/actions";
+import { UserProfile } from "@/types/user";
 
 export default function ProfilePage() {
   const { data: session } = useSession();
   const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState<any>(null);
+  const [profileData, setProfileData] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // Fetch profile data when session is available
@@ -22,7 +23,7 @@ export default function ProfilePage() {
       setIsLoading(true);
       try {
         const result = await getUserProfile();
-        if (result.success) {
+        if (result.success && 'data' in result && result.data) {
           setProfileData(result.data);
         }
       } catch (error) {
@@ -85,7 +86,7 @@ export default function ProfilePage() {
             // Refetch profile data after save
             if (session?.user) {
               getUserProfile().then((result) => {
-                if (result.success) setProfileData(result.data);
+                if (result.success && 'data' in result && result.data) setProfileData(result.data);
               });
             }
           }}
