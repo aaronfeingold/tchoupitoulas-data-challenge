@@ -73,7 +73,7 @@ export function NavigateToSignInButton({
   const router = useRouter();
 
   const handleNavigateToSignIn = () => {
-    router.push("/sign-in");
+    router.push("/auth/sign-in");
   };
 
   return (
