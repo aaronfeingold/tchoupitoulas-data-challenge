@@ -56,7 +56,7 @@ export function UserProfileProvider({
 
   useEffect(() => {
     loadProfile(true);
-  }, [session?.user]);
+  }, [session?.user, loadProfile]);
 
   const value: UserProfileContextType = {
     profileData,
