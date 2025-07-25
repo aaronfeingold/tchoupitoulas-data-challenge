@@ -6,10 +6,10 @@ import { accounts, sessions, users, verificationTokens } from "./schema";
 
 export const authOptions = {
   adapter: DrizzleAdapter(db, {
-    usersTable: users,
-    accountsTable: accounts,
-    sessionsTable: sessions,
-    verificationTokensTable: verificationTokens,
+    usersTable: users as any,
+    accountsTable: accounts as any,
+    sessionsTable: sessions as any,
+    verificationTokensTable: verificationTokens as any,
   }),
   providers: [
     GoogleProvider({
