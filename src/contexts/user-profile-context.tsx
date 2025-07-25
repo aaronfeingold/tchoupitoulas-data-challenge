@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { getUserProfile } from "@/lib/actions";
 import { User } from "@/lib/schema";
@@ -26,7 +26,7 @@ export function UserProfileProvider({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loadProfile = async (showLoading = true) => {
+  const loadProfile = useCallback(async (showLoading = true) => {
     if (!session?.user) {
       setProfileData(null);
       return;
@@ -48,7 +48,7 @@ export function UserProfileProvider({
     } finally {
       if (showLoading) setIsLoading(false);
     }
-  };
+  }, [session?.user]);
 
   const refreshProfile = async () => {
     await loadProfile(false);
