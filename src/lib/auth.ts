@@ -1,15 +1,15 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
-import { db } from "./db";
-import { accounts, sessions, users, verificationTokens } from "./schema";
+import { db, accounts, users, verificationTokens } from "@/db";
+import { JWT } from "next-auth/jwt";
+import { Session, User } from "next-auth";
 
 export const authOptions = {
   adapter: DrizzleAdapter(db, {
-    usersTable: users as any,
-    accountsTable: accounts as any,
-    sessionsTable: sessions as any,
-    verificationTokensTable: verificationTokens as any,
+    usersTable: users,
+    accountsTable: accounts,
+    verificationTokensTable: verificationTokens,
   }),
   providers: [
     GoogleProvider({
@@ -22,19 +22,23 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    session: async ({ session, token }: any) => {
+    jwt: async ({
+      user,
+      token,
+    }: {
+      user: User;
+      token: JWT;
+    }) => {
+      if (user) {
+        token.sub = user.id;
+      }
+      return token;
+    },
+    session: async ({ session, token }: { session: Session; token: JWT }) => {
       if (session?.user && token?.sub) {
         session.user.id = token.sub;
       }
       return session;
-    },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    jwt: async ({ user, token }: any) => {
-      if (user) {
-        token.uid = user.id;
-      }
-      return token;
     },
   },
   session: {

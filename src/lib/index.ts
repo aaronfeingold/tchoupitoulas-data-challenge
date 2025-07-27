@@ -1,7 +1,6 @@
 // Database and schema exports
-export { db } from "./db";
-export { hallOfFameEntries } from "./schema";
-export type { HallOfFameEntry, NewHallOfFameEntry } from "./schema";
+export { db, hallOfFameEntries } from "@/db";
+export type { HallOfFameEntry, NewHallOfFameEntry } from "@/db";
 
 // Server actions exports
 export * from "./actions";

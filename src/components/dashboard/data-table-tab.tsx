@@ -40,7 +40,7 @@ import { Button } from "@/components/ui/button";
 
 import { getAllEntries, revalidateAllCaches } from "@/lib/actions";
 import { formatDate, formatAge, formatElapsedTime } from "@/lib/utils";
-import { HallOfFameEntry } from "@/lib/schema";
+import { HallOfFameEntry } from "@/db";
 
 type SortColumn = keyof HallOfFameEntry | null;
 type SortDirection = "asc" | "desc";

@@ -1,7 +1,6 @@
 "use server";
 
-import { db } from "@/lib/db";
-import { hallOfFameEntries, users, type User } from "@/lib/schema";
+import { db, hallOfFameEntries, users, type User } from "@/db";
 import { sql, desc, asc, count, eq, and, gte, lte } from "drizzle-orm";
 import {
   startOfYear,
