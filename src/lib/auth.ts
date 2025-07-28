@@ -1,9 +1,11 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
+import EmailProvider from "next-auth/providers/email";
 import { db, accounts, users, verificationTokens } from "@/db";
 import { JWT } from "next-auth/jwt";
 import { Session, User } from "next-auth";
+import { sendMagicLinkEmail } from "./mailersend";
 
 export const authOptions = {
   adapter: DrizzleAdapter(db, {
@@ -20,15 +22,22 @@ export const authOptions = {
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
+    EmailProvider({
+      maxAge: 24 * 60 * 60, // 24 hours
+      sendVerificationRequest: async ({ identifier: email, url }) => {
+        try {
+          await sendMagicLinkEmail(email, url);
+        } catch (error) {
+          console.error("Failed to send magic link email:", error);
+          throw new Error(
+            "Failed to send verification email. Please try again."
+          );
+        }
+      },
+    }),
   ],
   callbacks: {
-    jwt: async ({
-      user,
-      token,
-    }: {
-      user: User;
-      token: JWT;
-    }) => {
+    jwt: async ({ user, token }: { user: User; token: JWT }) => {
       if (user) {
         token.sub = user.id;
       }
