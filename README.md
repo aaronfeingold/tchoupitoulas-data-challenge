@@ -4,7 +4,7 @@ A sophisticated data analysis application for exploring Hall of Fame entries wit
 
 ## Features
 
-- **Authentication System**: OAuth login with Google and GitHub
+- **Authentication System**: OAuth login with Google and GitHub, plus magic link email authentication
 - **User Profiles**: Custom ice cream themed avatars and profile management
 - **Data Explorer**: Browse through all Hall of Fame entries with powerful filtering and search
 - **Interactive Charts**: Yearly totals (bar chart) and monthly trends (line chart)
@@ -25,6 +25,7 @@ The application requires several environment variables for proper configuration:
 - **`NEXTAUTH_SECRET`**: Secret key for NextAuth.js session encryption
 - **`NEXTAUTH_URL`**: Your application URL for NextAuth.js
 - **OAuth credentials**: Client IDs and secrets for Google and GitHub authentication
+- **MailerSend credentials**: API token and email configuration for magic link authentication
 
 ## Tech Stack
 
@@ -84,11 +85,17 @@ The application requires several environment variables for proper configuration:
    GOOGLE_CLIENT_SECRET="your-google-client-secret"
    GITHUB_CLIENT_ID="your-github-client-id"
    GITHUB_CLIENT_SECRET="your-github-client-secret"
+   
+   # MailerSend Configuration (see setup guide below)
+   MAILERSEND_API_TOKEN="your-mailersend-api-token"
+   EMAIL_FROM="noreply@trial-xxx.mlsend.com"
+   EMAIL_FROM_NAME="Tchoupitoulas Data Challenge"
    ```
 
-4. **Set up OAuth providers** (see detailed guide below):
+4. **Set up authentication providers** (see detailed guide below):
    - Configure Google OAuth in Google Cloud Console
    - Set up GitHub OAuth app in GitHub Settings
+   - Configure MailerSend for magic link email authentication
 
 5. **Set up the database**:
    Run database migrations to create all required tables:
@@ -161,9 +168,9 @@ This will show you a list of all available components you can install.
 ### Component Configuration
 Components are automatically added to `src/components/ui/` with proper TypeScript types and Tailwind styling. The configuration is managed in `components.json`.
 
-## OAuth Provider Setup Guide
+## Authentication Provider Setup Guide
 
-To enable authentication, you need to configure OAuth applications with each provider:
+To enable authentication, you need to configure applications with each provider:
 
 ### Google OAuth Setup
 
@@ -192,6 +199,46 @@ To enable authentication, you need to configure OAuth applications with each pro
 4. **Register the application**
 5. **Copy the Client ID and generate a Client Secret**
 6. **Add them to your `.env.local` file**
+
+### MailerSend Setup (Magic Link Email Authentication)
+
+1. **Create MailerSend Account**:
+   - Go to https://www.mailersend.com/
+   - Sign up for a free account (12,000 emails/month free tier)
+
+2. **Generate API Token**:
+   - After logging in, go to "Integrations" > "API Tokens"
+   - Click "Generate new token"
+   - Give it a name like "Tchoupitoulas Data Challenge"
+   - Copy the generated token
+
+3. **Get Your Trial Domain**:
+   - MailerSend provides a trial domain automatically (format: `trial-xxx.mlsend.com`)
+   - You can find this in your MailerSend dashboard under "Domains"
+   - No domain verification needed for learning projects
+
+4. **Configure Environment Variables**:
+   ```env
+   # MailerSend Configuration
+   MAILERSEND_API_TOKEN="mlsn.your-actual-api-token-here"
+   EMAIL_FROM="noreply@trial-your-id.mlsend.com"
+   EMAIL_FROM_NAME="Tchoupitoulas Data Challenge"
+   ```
+
+5. **Test Email Delivery**:
+   - Start your application: `pnpm dev`
+   - Go to `/auth/sign-in`
+   - Click "Continue with Email"
+   - Enter your email address
+   - Check your inbox for the magic link
+
+### Important Notes for MailerSend
+
+- **Free Tier**: 12,000 emails/month, perfect for learning projects
+- **No Domain Required**: Trial domain works immediately without DNS setup
+- **Professional Emails**: Custom branded templates without needing your own domain
+- **API Rate Limits**: 60 requests per minute on free tier
+- **Upgrade Path**: Can add custom domain later when you're ready for production
 
 ### Generate NextAuth Secret
 
