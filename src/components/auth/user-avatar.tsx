@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { AvatarSkeleton } from "@/components/ui/avatar-skeleton";
 import Link from "next/link";
 import { useUserProfile } from "@/contexts/user-profile-context";
 
@@ -32,25 +33,25 @@ const getAvatarDisplay = ({
     return <Avatar size={32} />;
   }
 
-  if (userImage) {
-    return (
-      <Image
-        src={userImage ?? "/Tchoup-Sundae-128x128.png"}
-        alt="User Avatar"
-        width={32}
-        height={32}
-        className={`w-8 h-8 rounded-full ${userImage && "object-cover bg-background"}`}
-      />
-    );
-  }
+  return (
+    <Image
+      src={userImage ?? "/Tchoup-Sundae-128x128.png"}
+      alt="User Avatar"
+      width={32}
+      height={32}
+      className={`w-8 h-8 rounded-full ${userImage && "object-cover bg-background"}`}
+    />
+  );
 };
 
 export function UserAvatar() {
   const { data: session, status } = useSession();
   const { profileData } = useUserProfile();
 
+  // Note: Loading state now handled by Suspense boundary in parent components
+  // Keeping this as fallback for cases where Suspense isn't used
   if (status === "loading") {
-    return <div className="w-8 h-8 bg-muted rounded-full animate-pulse"></div>;
+    return <AvatarSkeleton size={32} />;
   }
 
   if (!session) {
@@ -82,8 +83,6 @@ export function UserAvatar() {
     );
   }
 
-  const user = session.user;
-
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -93,7 +92,7 @@ export function UserAvatar() {
         >
           {getAvatarDisplay({
             avatarSelection: profileData?.avatarSelection ?? null,
-            userImage: user?.image ?? null,
+            userImage: profileData?.image ?? null,
           })}
         </Button>
       </DropdownMenuTrigger>
@@ -106,10 +105,10 @@ export function UserAvatar() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              {user?.name || "User"}
+              {profileData?.name || "User"}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {user?.email}
+              {profileData?.email}
             </p>
           </div>
         </DropdownMenuLabel>

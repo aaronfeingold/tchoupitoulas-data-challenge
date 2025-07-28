@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, Home, LayoutPanelTop, User } from "lucide-react";
 import { UserAvatar } from "./auth/user-avatar";
+import { AvatarSkeleton } from "./ui/avatar-skeleton";
 
 export function Navbar() {
   const [isVisible, setIsVisible] = useState(true);
@@ -161,7 +162,9 @@ export function Navbar() {
             {/* Right side - User avatar */}
             <div className="flex items-center justify-end space-x-3">
               {/* User Avatar - always visible */}
-              <UserAvatar />
+              <Suspense fallback={<AvatarSkeleton size={32} />}>
+                <UserAvatar />
+              </Suspense>
             </div>
           </div>
 
@@ -174,7 +177,9 @@ export function Navbar() {
               <div className="pt-2 pb-3 space-y-1 px-4">
                 {/* Mobile user avatar */}
                 <div className="flex justify-center py-2 border-b border-border/40 mb-2">
-                  <UserAvatar />
+                  <Suspense fallback={<AvatarSkeleton size={32} />}>
+                    <UserAvatar />
+                  </Suspense>
                 </div>
                 <button
                   className={`flex items-center block w-full text-left px-3 py-2 text-base font-medium transition-colors rounded-md ${
