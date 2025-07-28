@@ -32,14 +32,14 @@ export function AvatarSection({ selectedAvatar, onAvatarChange }: AvatarSectionP
         {avatars.map((avatar, index) => {
           const Avatar = avatar.component;
           const isSelected = selectedAvatar === index;
-          
+
           return (
             <Button
               key={index}
               variant={isSelected ? "default" : "outline"}
               className={`aspect-square p-2 h-auto ${
-                isSelected 
-                  ? "ring-2 ring-mint shadow-lg" 
+                isSelected
+                  ? "ring-2 ring-mint shadow-lg"
                   : "hover:ring-1 hover:ring-mint/50"
               }`}
               onClick={() => onAvatarChange(index)}
