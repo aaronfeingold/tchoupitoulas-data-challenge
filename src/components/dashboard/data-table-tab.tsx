@@ -38,7 +38,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-import { getAllEntries, revalidateAllCaches } from "@/lib/actions";
+import { getAllEntries, revalidateAllCaches } from "@/actions";
 import { formatDate, formatAge, formatElapsedTime } from "@/lib/utils";
 import { HallOfFameEntry } from "@/db";
 

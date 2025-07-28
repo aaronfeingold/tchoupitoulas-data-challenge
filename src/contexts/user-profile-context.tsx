@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
-import { getUserProfile } from "@/lib/actions";
+import { getUserProfile } from "@/actions";
 import { User } from "@/db";
 
 interface UserProfileContextType {

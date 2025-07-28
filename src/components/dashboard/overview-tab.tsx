@@ -16,7 +16,7 @@ import {
   getTopHallOfFamers,
   getYoungest,
   getFastest,
-} from "@/lib/actions";
+} from "@/actions";
 import { formatDate, formatNumber } from "@/lib/utils";
 import {
   CalendarDays,

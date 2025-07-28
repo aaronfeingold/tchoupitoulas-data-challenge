@@ -15,7 +15,7 @@ import {
   Database,
 } from "lucide-react";
 import { toast } from "sonner";
-import { deleteUserAccount, exportUserData } from "@/lib/actions";
+import { deleteUserAccount, exportUserData } from "@/actions";
 
 export function PrivacySettings() {
   const [isExporting, setIsExporting] = useState(false);

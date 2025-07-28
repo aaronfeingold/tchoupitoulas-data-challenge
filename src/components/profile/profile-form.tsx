@@ -8,8 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AvatarSection } from "./avatar-section";
 import { Save, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { updateUserProfile } from "@/lib/actions";
-import { User } from "@/lib/schema";
+import { updateUserProfile } from "@/actions";
+import { User } from "@/db";
 
 interface ProfileFormProps {
   onSave: () => void;

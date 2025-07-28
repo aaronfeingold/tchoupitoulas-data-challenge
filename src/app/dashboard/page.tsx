@@ -7,7 +7,7 @@ import { OverviewTab } from "@/components/dashboard/overview-tab";
 import { DataTableTab } from "@/components/dashboard/data-table-tab";
 import { AnalyticsTab } from "@/components/dashboard/analytics-tab";
 import { BarChart3, Table2, LayoutDashboard } from "lucide-react";
-import { getAllEntries } from "@/lib/actions";
+import { getAllEntries } from "@/actions";
 
 export default function DashboardPage() {
   // Check if core data is loading

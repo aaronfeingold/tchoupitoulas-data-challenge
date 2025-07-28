@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { Construction } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -11,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { YearlyChart } from "@/components/charts/yearly-chart";
 import { MonthlyChart } from "@/components/charts/monthly-chart";
-import { getYearlyTotals, getMonthlyTotals } from "@/lib/actions";
+import { getYearlyTotals, getMonthlyTotals } from "@/actions";
 
 export function AnalyticsTab() {
   const { data: yearlyData, isLoading: yearlyLoading } = useQuery({
@@ -61,7 +62,10 @@ export function AnalyticsTab() {
       {/* Additional Analytics Coming Soon */}
       <Card className="glass-effect">
         <CardHeader>
-          <CardTitle>🚧 More Analytics Coming Soon</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Construction className="h-5 w-5" />
+            More Analytics Coming Soon
+          </CardTitle>
           <CardDescription>
             Additional charts and insights will be added here
           </CardDescription>
