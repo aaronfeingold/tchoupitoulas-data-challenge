@@ -16,7 +16,7 @@ import {
   getTopHallOfFamers,
   getYoungest,
   getFastest,
-} from "@/lib/actions";
+} from "@/actions";
 import { formatDate, formatNumber } from "@/lib/utils";
 import {
   CalendarDays,
@@ -185,7 +185,7 @@ export function OverviewTab() {
                   {(() => {
                     const daysSince = differenceInDays(
                       new Date(),
-                      new Date(dateRange.latest)
+                      new Date(dateRange.latest),
                     );
                     return daysSince === 0
                       ? "Today"

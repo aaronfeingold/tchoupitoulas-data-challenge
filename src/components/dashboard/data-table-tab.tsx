@@ -38,9 +38,9 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-import { getAllEntries, revalidateAllCaches } from "@/lib/actions";
+import { getAllEntries, revalidateAllCaches } from "@/actions";
 import { formatDate, formatAge, formatElapsedTime } from "@/lib/utils";
-import { HallOfFameEntry } from "@/lib/schema";
+import { HallOfFameEntry } from "@/db";
 
 type SortColumn = keyof HallOfFameEntry | null;
 type SortDirection = "asc" | "desc";
@@ -171,7 +171,7 @@ export function DataTableTab() {
 
   // State for tooltip
   const [tooltipVisible, setTooltipVisible] = useState<Record<string, boolean>>(
-    {}
+    {},
   );
 
   // Refs for resize functionality
@@ -193,8 +193,8 @@ export function DataTableTab() {
     if (globalSearch) {
       filteredEntries = filteredEntries.filter((entry) =>
         Object.values(entry).some((value) =>
-          value?.toString().toLowerCase().includes(globalSearch.toLowerCase())
-        )
+          value?.toString().toLowerCase().includes(globalSearch.toLowerCase()),
+        ),
       );
     }
 
@@ -203,12 +203,12 @@ export function DataTableTab() {
       filteredEntries = filteredEntries.filter((entry) =>
         entry.participantNumber
           .toString()
-          .includes(columnFilters.participantNumber)
+          .includes(columnFilters.participantNumber),
       );
     }
     if (columnFilters.name) {
       filteredEntries = filteredEntries.filter((entry) =>
-        entry.name.toLowerCase().includes(columnFilters.name.toLowerCase())
+        entry.name.toLowerCase().includes(columnFilters.name.toLowerCase()),
       );
     }
 
@@ -216,7 +216,7 @@ export function DataTableTab() {
       filteredEntries = filteredEntries.filter((entry) =>
         formatDate(entry.parsedDate)
           .toLowerCase()
-          .includes(columnFilters.parsedDate.toLowerCase())
+          .includes(columnFilters.parsedDate.toLowerCase()),
       );
     }
 
@@ -225,7 +225,7 @@ export function DataTableTab() {
         (entry) =>
           entry.notes
             ?.toLowerCase()
-            .includes(columnFilters.notes.toLowerCase()) ?? false
+            .includes(columnFilters.notes.toLowerCase()) ?? false,
       );
     }
 
@@ -233,7 +233,7 @@ export function DataTableTab() {
       filteredEntries = filteredEntries.filter(
         (entry) =>
           entry.elapsedTime?.toString().includes(columnFilters.elapsedTime) ??
-          false
+          false,
       );
     }
 
@@ -242,13 +242,13 @@ export function DataTableTab() {
         (entry) =>
           entry.completionCount
             ?.toString()
-            .includes(columnFilters.completionCount) ?? false
+            .includes(columnFilters.completionCount) ?? false,
       );
     }
 
     if (columnFilters.age) {
       filteredEntries = filteredEntries.filter(
-        (entry) => entry.age?.toString().includes(columnFilters.age) ?? false
+        (entry) => entry.age?.toString().includes(columnFilters.age) ?? false,
       );
     }
 
@@ -343,7 +343,7 @@ export function DataTableTab() {
 
   const handleMouseDown = (
     column: keyof typeof columnWidths,
-    e: React.MouseEvent
+    e: React.MouseEvent,
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -789,12 +789,12 @@ export function DataTableTab() {
                 Showing{" "}
                 {Math.min(
                   (currentPage - 1) * pageSize + 1,
-                  filteredAndSortedEntries.length
+                  filteredAndSortedEntries.length,
                 )}{" "}
                 to{" "}
                 {Math.min(
                   currentPage * pageSize,
-                  filteredAndSortedEntries.length
+                  filteredAndSortedEntries.length,
                 )}{" "}
                 of {filteredAndSortedEntries.length} entries
               </span>

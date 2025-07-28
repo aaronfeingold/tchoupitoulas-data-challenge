@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { QueryProvider } from "@/lib/query-provider";
+import { AuthSessionProvider } from "@/contexts/auth-session-provider";
+import { UserProfileProvider } from "@/contexts/user-profile-context";
 import { Poppins } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import Script from "next/script";
@@ -12,7 +14,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://tchoupitoulas-data-challenge.vercel.app"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+  ),
   title: "Tchoupitoulas Data Challenge",
   description:
     "A fun and interactive data analysis application for exploring hall of fame entries",
@@ -21,7 +25,7 @@ export const metadata: Metadata = {
     title: "Tchoupitoulas Data Challenge",
     description:
       "A fun and interactive data analysis application for exploring hall of fame entries",
-    url: "https://tchoupitoulas-data-challenge.vercel.app",
+    url: process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
     siteName: "Tchoupitoulas Data Challenge",
     images: [
       {
@@ -83,10 +87,14 @@ export default function RootLayout({
           `}
         </Script>
         <Analytics />
-        <QueryProvider>
-          <Navbar />
-          {children}
-        </QueryProvider>
+        <AuthSessionProvider>
+          <UserProfileProvider>
+            <QueryProvider>
+              <Navbar />
+              {children}
+            </QueryProvider>
+          </UserProfileProvider>
+        </AuthSessionProvider>
       </body>
     </html>
   );

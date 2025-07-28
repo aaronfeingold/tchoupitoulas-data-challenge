@@ -11,6 +11,20 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    rules: {
+      // Absolutely no emojis allowed in code
+      "no-irregular-whitespace": [
+        "error",
+        {
+          skipStrings: false,
+          skipComments: false,
+          skipRegExps: false,
+          skipTemplates: false,
+        },
+      ],
+    },
+  },
 ];
 
 export default eslintConfig;

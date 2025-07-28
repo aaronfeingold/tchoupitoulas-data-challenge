@@ -31,7 +31,7 @@ export function ImageCarousel({
   showPreviews = false,
 }: ImageCarouselProps) {
   const plugin = React.useRef(
-    Autoplay({ delay: autoplayDelay, stopOnInteraction: false })
+    Autoplay({ delay: autoplayDelay, stopOnInteraction: false }),
   );
 
   const [api, setApi] = React.useState<CarouselApi>();
@@ -91,7 +91,7 @@ export function ImageCarousel({
                       isCenter
                         ? "opacity-100 scale-100 shadow-xl"
                         : "opacity-60 scale-90 shadow-md",
-                      imageClassName
+                      imageClassName,
                     )}
                     priority={index === 0}
                   />
@@ -124,7 +124,7 @@ export function ImageCarousel({
                 height={400}
                 className={cn(
                   "w-full h-full object-cover rounded-lg shadow-lg hover-lift transition-transform duration-300",
-                  imageClassName
+                  imageClassName,
                 )}
                 priority={index === 0}
               />

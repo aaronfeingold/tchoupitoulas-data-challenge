@@ -4,6 +4,8 @@ A sophisticated data analysis application for exploring Hall of Fame entries wit
 
 ## Features
 
+- **Authentication System**: OAuth login with Google and GitHub, plus magic link email authentication
+- **User Profiles**: Custom ice cream themed avatars and profile management
 - **Data Explorer**: Browse through all Hall of Fame entries with powerful filtering and search
 - **Interactive Charts**: Yearly totals (bar chart) and monthly trends (line chart)
 - **Analytics Dashboard**: Comprehensive insights including:
@@ -14,11 +16,23 @@ A sophisticated data analysis application for exploring Hall of Fame entries wit
 - **Modern UI**: Beautiful, responsive design with glass morphism effects
 - **Fun Theme**: Ice cream shop inspired design with mint and pink color palette
 
+## Environment Variables
+
+The application requires several environment variables for proper configuration:
+
+- **`NEXT_PUBLIC_BASE_URL`**: Base URL for the application, used for metadata and social sharing. Should be set to your domain in production (e.g., `https://yourdomain.com`) and `http://localhost:3000` for development.
+- **`DATABASE_URL`**: PostgreSQL connection string
+- **`NEXTAUTH_SECRET`**: Secret key for NextAuth.js session encryption
+- **`NEXTAUTH_URL`**: Your application URL for NextAuth.js
+- **OAuth credentials**: Client IDs and secrets for Google and GitHub authentication
+- **MailerSend credentials**: API token and email configuration for magic link authentication
+
 ## Tech Stack
 
 - **Framework**: Next.js 15+ with App Router
 - **Language**: TypeScript
 - **Database**: PostgreSQL with Drizzle ORM (NeonDB)
+- **Authentication**: NextAuth.js with OAuth providers
 - **Styling**: Tailwind CSS + shadcn/ui components
 - **State Management**: TanStack Query (React Query)
 - **Charts**: Recharts
@@ -44,29 +58,50 @@ A sophisticated data analysis application for exploring Hall of Fame entries wit
    ```
 
 3. **Set up environment variables**:
-   Create a `.env.local` file in the app directory:
-   ```env
-   DATABASE_URL="postgresql://username:password@hostname:port/database"
-   NEXT_PUBLIC_APP_URL="http://localhost:3000"
-   ```
-
-4. **Set up the database**:
-   Ensure your PostgreSQL database has the following table:
-   ```sql
-   CREATE TABLE hall_of_fame_entries (
-       id SERIAL PRIMARY KEY,
-       participant_number INTEGER UNIQUE NOT NULL,
-       name VARCHAR(255) NOT NULL,
-       date_str VARCHAR(50) NOT NULL,
-       parsed_date TIMESTAMP NOT NULL,
-       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-   );
-   ```
-
-5. **Run database migrations** (optional):
+   Use the automated setup script:
    ```bash
-   pnpm drizzle-kit push
+   node scripts/dev-setup.js
+   ```
+   
+   Or manually copy and configure:
+   ```bash
+   cp env.example .env.local
+   ```
+   
+   Update `.env.local` with your configuration:
+   ```env
+   # Database Configuration
+   DATABASE_URL="postgresql://username:password@hostname:port/database"
+   
+   # NextAuth.js Configuration
+   NEXTAUTH_SECRET="your-secret-key-here"  # Generate with: openssl rand -base64 32
+   NEXTAUTH_URL="http://localhost:3000"
+   
+   # App Configuration
+   NEXT_PUBLIC_BASE_URL="http://localhost:3000"  # Base URL for metadata and social sharing
+   
+   # OAuth Provider Credentials (see setup guide below)
+   GOOGLE_CLIENT_ID="your-google-client-id"
+   GOOGLE_CLIENT_SECRET="your-google-client-secret"
+   GITHUB_CLIENT_ID="your-github-client-id"
+   GITHUB_CLIENT_SECRET="your-github-client-secret"
+   
+   # MailerSend Configuration (see setup guide below)
+   MAILERSEND_API_TOKEN="your-mailersend-api-token"
+   EMAIL_FROM="noreply@trial-xxx.mlsend.com"
+   EMAIL_FROM_NAME="Tchoupitoulas Data Challenge"
+   ```
+
+4. **Set up authentication providers** (see detailed guide below):
+   - Configure Google OAuth in Google Cloud Console
+   - Set up GitHub OAuth app in GitHub Settings
+   - Configure MailerSend for magic link email authentication
+
+5. **Set up the database**:
+   Run database migrations to create all required tables:
+   ```bash
+   pnpm run db:generate
+   pnpm run db:push
    ```
 
 ## Running the Application
@@ -83,6 +118,243 @@ A sophisticated data analysis application for exploring Hall of Fame entries wit
    ```
 
 3. **Open your browser** and navigate to `http://localhost:3000`
+
+## Quick Start for Developers
+
+For the fastest setup experience:
+
+```bash
+# Clone and setup
+git clone <repo> && cd app
+pnpm install
+
+# Automated environment setup (generates .env.local with secret)
+node scripts/dev-setup.js
+
+# Set up database
+pnpm run db:push
+
+# Start development
+pnpm dev
+```
+
+The `dev-setup.js` script will:
+- Copy `env.example` to `.env.local`
+- Generate a secure `NEXTAUTH_SECRET`
+- Provide next steps for OAuth configuration
+
+## Adding UI Components (shadcn/ui)
+
+This project uses shadcn/ui for the component library. To add new components:
+
+### Install a new component:
+```bash
+npx shadcn@latest add [component-name]
+```
+
+### Example:
+```bash
+# Form components
+npx shadcn@latest add form
+```
+
+### See all available components:
+```bash
+npx shadcn@latest add
+```
+
+This will show you a list of all available components you can install.
+
+### Component Configuration
+Components are automatically added to `src/components/ui/` with proper TypeScript types and Tailwind styling. The configuration is managed in `components.json`.
+
+## Authentication Provider Setup Guide
+
+To enable authentication, you need to configure applications with each provider:
+
+### Google OAuth Setup
+
+1. **Go to Google Cloud Console**: https://console.cloud.google.com/
+2. **Create a new project** or select an existing one
+3. **Enable Google+ API**:
+   - Go to "APIs & Services" > "Library"
+   - Search for "Google+ API" and enable it
+4. **Create OAuth credentials**:
+   - Go to "APIs & Services" > "Credentials"
+   - Click "Create Credentials" > "OAuth 2.0 Client ID"
+   - Choose "Web application" as application type
+   - Add authorized redirect URIs:
+     - Development: `http://localhost:3000/api/auth/callback/google`
+     - Production: `https://yourdomain.com/api/auth/callback/google`
+5. **Copy the Client ID and Client Secret** to your `.env.local` file
+
+### GitHub OAuth Setup
+
+1. **Go to GitHub Settings**: https://github.com/settings/developers
+2. **Click "New OAuth App"**
+3. **Fill in the application details**:
+   - Application name: "Tchoupitoulas Data Challenge"
+   - Homepage URL: `http://localhost:3000` (or your domain)
+   - Authorization callback URL: `http://localhost:3000/api/auth/callback/github`
+4. **Register the application**
+5. **Copy the Client ID and generate a Client Secret**
+6. **Add them to your `.env.local` file**
+
+### MailerSend Setup (Magic Link Email Authentication)
+
+1. **Create MailerSend Account**:
+   - Go to https://www.mailersend.com/
+   - Sign up for a free account (12,000 emails/month free tier)
+
+2. **Generate API Token**:
+   - After logging in, go to "Integrations" > "API Tokens"
+   - Click "Generate new token"
+   - Give it a name like "Tchoupitoulas Data Challenge"
+   - Copy the generated token
+
+3. **Get Your Trial Domain**:
+   - MailerSend provides a trial domain automatically (format: `trial-xxx.mlsend.com`)
+   - You can find this in your MailerSend dashboard under "Domains"
+   - No domain verification needed for learning projects
+
+4. **Configure Environment Variables**:
+   ```env
+   # MailerSend Configuration
+   MAILERSEND_API_TOKEN="mlsn.your-actual-api-token-here"
+   EMAIL_FROM="noreply@trial-your-id.mlsend.com"
+   EMAIL_FROM_NAME="Tchoupitoulas Data Challenge"
+   ```
+
+5. **Test Email Delivery**:
+   - Start your application: `pnpm dev`
+   - Go to `/auth/sign-in`
+   - Click "Continue with Email"
+   - Enter your email address
+   - Check your inbox for the magic link
+
+### Important Notes for MailerSend
+
+- **Free Tier**: 12,000 emails/month, perfect for learning projects
+- **No Domain Required**: Trial domain works immediately without DNS setup
+- **Professional Emails**: Custom branded templates without needing your own domain
+- **API Rate Limits**: 60 requests per minute on free tier
+- **Upgrade Path**: Can add custom domain later when you're ready for production
+
+### Generate NextAuth Secret
+
+Generate a secure secret for NextAuth.js:
+```bash
+openssl rand -base64 32
+```
+Add this to your `.env.local` as `NEXTAUTH_SECRET`.
+
+### Developer Quality of Life - Multiple Environment Support
+
+Most OAuth providers allow multiple redirect URIs, making local development easier:
+
+#### Google OAuth - Multiple URIs
+- In Google Cloud Console, you can add **multiple** authorized redirect URIs:
+  ```
+  http://localhost:3000/api/auth/callback/google
+  http://localhost:3001/api/auth/callback/google  (if using different port)
+  https://yourdomain.com/api/auth/callback/google
+  https://staging.yourdomain.com/api/auth/callback/google
+  ```
+
+#### GitHub OAuth - Multiple Apps Approach
+- **Option 1**: Create separate OAuth apps for each environment:
+  - "MyApp - Development" (localhost callback)
+  - "MyApp - Staging" (staging domain callback)  
+  - "MyApp - Production" (production domain callback)
+- **Option 2**: GitHub allows multiple callback URLs in a single app
+
+
+### Environment-Specific Configuration
+
+Create environment-specific `.env` files:
+
+**`.env.local` (Development)**:
+```env
+NEXTAUTH_URL=http://localhost:3000
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+GOOGLE_CLIENT_ID=your-dev-google-client-id
+GITHUB_CLIENT_ID=your-dev-github-client-id
+# Use dev-specific OAuth apps if needed
+```
+
+**`.env.staging`**:
+```env
+NEXTAUTH_URL=https://staging.yourdomain.com
+NEXT_PUBLIC_BASE_URL=https://staging.yourdomain.com
+GOOGLE_CLIENT_ID=your-staging-google-client-id
+GITHUB_CLIENT_ID=your-staging-github-client-id
+```
+
+**`.env.production`**:
+```env
+NEXTAUTH_URL=https://yourdomain.com
+NEXT_PUBLIC_BASE_URL=https://yourdomain.com
+GOOGLE_CLIENT_ID=your-prod-google-client-id
+GITHUB_CLIENT_ID=your-prod-github-client-id
+```
+
+### Development Workarounds
+
+If you can only set one redirect URI per provider:
+
+1. **Use ngrok for local development**:
+   ```bash
+   # Install ngrok
+   npm install -g ngrok
+   
+   # Start your Next.js app
+   pnpm dev
+   
+   # In another terminal, create tunnel
+   ngrok http 3000
+   
+   # Use the ngrok HTTPS URL as your OAuth redirect URI
+   # Example: https://abc123.ngrok.io/api/auth/callback/google
+   ```
+
+2. **Use a development subdomain**:
+   - Set up `dev.yourdomain.com` pointing to your local IP
+   - Use this consistent URL for OAuth callbacks
+
+3. **Environment switching script**:
+   ```bash
+   # Available scripts
+   pnpm run setup:env      # Copy env.example to .env.local
+   pnpm run setup:secret   # Generate NEXTAUTH_SECRET
+   pnpm run dev:local      # Start with local environment  
+   pnpm run dev:tunnel     # Start with ngrok reminder
+   ```
+
+### Important Notes
+
+- **Most providers support multiple redirect URIs** - always check first!
+- **Keep your secrets secure** - never commit them to version control
+- **Use separate OAuth apps per environment** for better security
+- **Test each provider** after setup to ensure they work correctly
+- **Document your OAuth setup** for team members
+
+## Troubleshooting
+
+### NextAuth JWT Decryption Error
+
+If you encounter a `JWEDecryptionFailed: decryption operation failed` error, this is usually caused by stale session cookies in your browser.
+
+**Quick Fix**:
+- Clear your browser cache/cookies for `localhost:3000`
+- Or test in an incognito/private browser window
+
+**Why this happens**: The browser has old session cookies encrypted with a different `NEXTAUTH_SECRET` that can't be decrypted with your current secret.
+
+**If the problem persists**:
+1. Generate a new `NEXTAUTH_SECRET`: `openssl rand -base64 32`
+2. Update your `.env.local` file
+3. Restart your development server
+4. Clear browser cache again
 
 ## Dashboard Features
 

@@ -1,7 +1,6 @@
 "use server";
 
-import { db } from "@/lib/db";
-import { hallOfFameEntries } from "@/lib/schema";
+import { db, hallOfFameEntries } from "@/db";
 import { sql, desc, asc, count, eq, and, gte, lte } from "drizzle-orm";
 import {
   startOfYear,
@@ -12,19 +11,7 @@ import {
   getDaysInMonth,
 } from "date-fns";
 import { unstable_cache } from "next/cache";
-
-// Cache tags for different types of data
-const CACHE_TAGS = {
-  ALL_ENTRIES: "all-entries",
-  YEARLY_TOTALS: "yearly-totals",
-  MONTHLY_TOTALS: "monthly-totals",
-  DAILY_TOTALS: "daily-totals",
-  NAMES: "names",
-  STATS: "stats",
-} as const;
-
-// Cache duration in seconds (24 hours)
-const CACHE_DURATION = 24 * 60 * 60;
+import { CACHE_TAGS, CACHE_DURATION } from "./cache";
 
 export const getAllEntries = unstable_cache(
   async () => {
@@ -379,15 +366,6 @@ export const getLongestStreak = unstable_cache(
     revalidate: CACHE_DURATION,
   }
 );
-
-// Utility function to revalidate all caches when data changes
-export async function revalidateAllCaches() {
-  const { revalidateTag } = await import("next/cache");
-
-  Object.values(CACHE_TAGS).forEach((tag) => {
-    revalidateTag(tag);
-  });
-}
 
 export const getYoungest = unstable_cache(
   async () => {
