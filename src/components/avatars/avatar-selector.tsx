@@ -43,7 +43,7 @@ export function AvatarSelector({
           <div className="mb-3">
             {(() => {
               const Avatar = iceCreamAvatars[previewAvatar].component;
-              return <Avatar size={80} />;
+              return <Avatar size={120} />;
             })()}
           </div>
           <p className="text-sm font-medium text-center">
@@ -52,7 +52,7 @@ export function AvatarSelector({
         </div>
 
         {/* Avatar Grid */}
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-3 gap-4">
           {iceCreamAvatars.map((avatar, index) => {
             const Avatar = avatar.component;
             const isSelected = index === previewAvatar;
@@ -62,7 +62,7 @@ export function AvatarSelector({
                 key={index}
                 onClick={() => handleAvatarClick(index)}
                 className={`
-                  p-3 rounded-lg border-2 transition-all duration-200 hover:scale-105
+                  p-4 rounded-lg border-2 transition-all duration-200 hover:scale-105
                   ${
                     isSelected
                       ? "border-primary bg-primary/10 shadow-md"
@@ -71,7 +71,7 @@ export function AvatarSelector({
                 `}
                 title={avatar.name}
               >
-                <Avatar size={40} />
+                <Avatar size={56} />
               </button>
             );
           })}

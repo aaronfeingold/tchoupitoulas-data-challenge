@@ -30,16 +30,16 @@ const getAvatarDisplay = ({
   if (avatarSelection !== null && avatarSelection !== undefined) {
     const avatarData = getAvatarComponent(avatarSelection);
     const Avatar = avatarData.component;
-    return <Avatar size={32} />;
+    return <Avatar size={40} />;
   }
 
   return (
     <Image
       src={userImage ?? "/Tchoup-Sundae-128x128.png"}
       alt="User Avatar"
-      width={32}
-      height={32}
-      className={`w-8 h-8 rounded-full ${userImage && "object-cover bg-background"}`}
+      width={40}
+      height={40}
+      className={`w-10 h-10 rounded-full ${userImage && "object-cover bg-background"}`}
     />
   );
 };
@@ -51,7 +51,7 @@ export function UserAvatar() {
   // Note: Loading state now handled by Suspense boundary in parent components
   // Keeping this as fallback for cases where Suspense isn't used
   if (status === "loading") {
-    return <AvatarSkeleton size={32} />;
+    return <AvatarSkeleton size={40} />;
   }
 
   if (!session) {
@@ -60,7 +60,7 @@ export function UserAvatar() {
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
-            className="relative h-8 w-8 rounded-full p-0 overflow-visible"
+            className="relative h-10 w-10 rounded-full p-0 overflow-visible"
           >
             {getAvatarDisplay({ avatarSelection: null, userImage: null })}
           </Button>
@@ -88,7 +88,7 @@ export function UserAvatar() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="relative h-8 w-8 rounded-full p-0 overflow-visible"
+          className="relative h-10 w-10 rounded-full p-0 overflow-visible"
         >
           {getAvatarDisplay({
             avatarSelection: profileData?.avatarSelection ?? null,

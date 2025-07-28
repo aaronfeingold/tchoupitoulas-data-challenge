@@ -35,8 +35,8 @@ export default function ProfilePage() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <div className="flex items-center space-x-4">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-mint to-pink p-2 flex items-center justify-center">
-                    <IceCream size={32} className="text-white" />
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-mint to-pink p-2 flex items-center justify-center">
+                    <IceCream size={40} className="text-white" />
                   </div>
                   <div>
                     <div className="h-6 bg-muted rounded w-32 mb-2"></div>

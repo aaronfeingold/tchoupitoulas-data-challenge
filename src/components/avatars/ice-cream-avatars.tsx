@@ -10,14 +10,14 @@ export function VanillaAvatar({ size = 32, ...props }: AvatarProps) {
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#FEF3C7" />
       <path
-        d="M12 8c0-2.2 1.8-4 4-4s4 1.8 4 4v4c0 2.2-1.8 4-4 4s-4-1.8-4-4V8z"
+        d="M11 8c0-2.8 2.2-5 5-5s5 2.2 5 5v4c0 2.8-2.2 5-5 5s-5-2.2-5-5V8z"
         fill="#FBBF24"
       />
-      <ellipse cx="16" cy="10" rx="3" ry="2" fill="#FFFFFF" />
+      <ellipse cx="16" cy="9.5" rx="3.5" ry="2.5" fill="#FFFFFF" />
       <path
-        d="M15 16L16 22L17 16"
+        d="M14.5 17L16 24L17.5 17"
         stroke="#D97706"
-        strokeWidth="2"
+        strokeWidth="3"
         strokeLinecap="round"
       />
     </svg>
@@ -29,13 +29,13 @@ export function ChocolateAvatar({ size = 32, ...props }: AvatarProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#FCD34D" />
-      <circle cx="16" cy="12" r="6" fill="#92400E" />
-      <circle cx="14" cy="10" r="1" fill="#451A03" />
-      <circle cx="18" cy="11" r="1" fill="#451A03" />
+      <circle cx="16" cy="11" r="7" fill="#92400E" />
+      <circle cx="13.5" cy="9" r="1.5" fill="#451A03" />
+      <circle cx="18.5" cy="10.5" r="1.5" fill="#451A03" />
       <path
-        d="M15 20L16 26L17 20"
+        d="M14.5 18L16 26L17.5 18"
         stroke="#D97706"
-        strokeWidth="2"
+        strokeWidth="3"
         strokeLinecap="round"
       />
     </svg>
@@ -47,15 +47,15 @@ export function StrawberryAvatar({ size = 32, ...props }: AvatarProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#FECACA" />
-      <circle cx="16" cy="12" r="6" fill="#F87171" />
+      <circle cx="16" cy="11" r="7" fill="#F87171" />
       <path
-        d="M13 8L15 6L17 8L19 6L21 8"
+        d="M12 7L14 5L16 7L18 5L20 7"
         stroke="#DC2626"
-        strokeWidth="1.5"
+        strokeWidth="2.5"
         strokeLinecap="round"
       />
-      <circle cx="16" cy="12" r="1" fill="#FFFFFF" />
-      <rect x="13" y="18" width="6" height="8" rx="1" fill="#A3A3A3" />
+      <circle cx="16" cy="11" r="1.5" fill="#FFFFFF" />
+      <rect x="12.5" y="18" width="7" height="9" rx="1.5" fill="#A3A3A3" />
     </svg>
   );
 }
@@ -65,14 +65,14 @@ export function MintAvatar({ size = 32, ...props }: AvatarProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#D1FAE5" />
-      <circle cx="16" cy="12" r="6" fill="#34D399" />
-      <rect x="14" y="10" width="1" height="1" fill="#059669" />
-      <rect x="17" y="9" width="1" height="1" fill="#059669" />
-      <rect x="15" y="13" width="1" height="1" fill="#059669" />
+      <circle cx="16" cy="11" r="7" fill="#34D399" />
+      <rect x="13" y="9" width="2" height="2" rx="0.5" fill="#059669" />
+      <rect x="17" y="8" width="2" height="2" rx="0.5" fill="#059669" />
+      <rect x="14.5" y="12.5" width="2" height="2" rx="0.5" fill="#059669" />
       <path
-        d="M15 18L16 24L17 18"
+        d="M14.5 18L16 26L17.5 18"
         stroke="#D97706"
-        strokeWidth="2"
+        strokeWidth="3"
         strokeLinecap="round"
       />
     </svg>
@@ -84,10 +84,10 @@ export function RainbowAvatar({ size = 32, ...props }: AvatarProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#FDE68A" />
-      <path d="M10 12h12v4c0 3.3-2.7 6-6 6s-6-2.7-6-6v-4z" fill="#F87171" />
-      <path d="M10 12h12v2c0 3.3-2.7 6-6 6s-6-2.7-6-6v-2z" fill="#FBBF24" />
-      <path d="M10 12h12c0-3.3-2.7-6-6-6s-6 2.7-6 6z" fill="#34D399" />
-      <rect x="13" y="22" width="6" height="6" rx="1" fill="#A3A3A3" />
+      <path d="M9 11h14v5c0 3.9-3.1 7-7 7s-7-3.1-7-7v-5z" fill="#F87171" />
+      <path d="M9 11h14v2.5c0 3.9-3.1 7-7 7s-7-3.1-7-7v-2.5z" fill="#FBBF24" />
+      <path d="M9 11h14c0-3.9-3.1-7-7-7s-7 3.1-7 7z" fill="#34D399" />
+      <rect x="12.5" y="23" width="7" height="7" rx="1.5" fill="#A3A3A3" />
     </svg>
   );
 }
@@ -97,14 +97,14 @@ export function CookiesAvatar({ size = 32, ...props }: AvatarProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#E5E7EB" />
-      <circle cx="16" cy="12" r="6" fill="#FFFFFF" />
-      <circle cx="14" cy="10" r="1" fill="#1F2937" />
-      <circle cx="18" cy="11" r="1" fill="#1F2937" />
-      <circle cx="16" cy="14" r="1" fill="#1F2937" />
+      <circle cx="16" cy="11" r="7" fill="#FFFFFF" />
+      <circle cx="13.5" cy="9" r="1.5" fill="#1F2937" />
+      <circle cx="18.5" cy="10" r="1.5" fill="#1F2937" />
+      <circle cx="16" cy="13" r="1.5" fill="#1F2937" />
       <path
-        d="M15 18L16 24L17 18"
+        d="M14.5 18L16 26L17.5 18"
         stroke="#D97706"
-        strokeWidth="2"
+        strokeWidth="3"
         strokeLinecap="round"
       />
     </svg>
@@ -116,15 +116,15 @@ export function BlueMoonAvatar({ size = 32, ...props }: AvatarProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#DBEAFE" />
-      <circle cx="16" cy="12" r="6" fill="#3B82F6" />
+      <circle cx="16" cy="11" r="7" fill="#3B82F6" />
       <path
-        d="M13 10c1-1 2-1 3 0s2 1 3 0"
+        d="M12 9c1.5-1 3-1 4 0s3 1 4 0"
         stroke="#1E40AF"
-        strokeWidth="1"
+        strokeWidth="2"
         fill="none"
       />
-      <circle cx="16" cy="12" r="1" fill="#FFFFFF" />
-      <rect x="13" y="18" width="6" height="8" rx="1" fill="#A3A3A3" />
+      <circle cx="16" cy="11" r="1.5" fill="#FFFFFF" />
+      <rect x="12.5" y="18" width="7" height="9" rx="1.5" fill="#A3A3A3" />
     </svg>
   );
 }
@@ -134,17 +134,17 @@ export function CaramelAvatar({ size = 32, ...props }: AvatarProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...props}>
       <circle cx="16" cy="16" r="16" fill="#FEF3C7" />
-      <circle cx="16" cy="12" r="6" fill="#FBBF24" />
+      <circle cx="16" cy="11" r="7" fill="#FBBF24" />
       <path
-        d="M13 9c2 1 4 1 6 0M13 12c2-1 4-1 6 0M13 15c2 1 4 1 6 0"
+        d="M12 8c2.5 1 5 1 8 0M12 11c2.5-1 5-1 8 0M12 14c2.5 1 5 1 8 0"
         stroke="#92400E"
-        strokeWidth="1"
+        strokeWidth="2"
         fill="none"
       />
       <path
-        d="M15 18L16 24L17 18"
+        d="M14.5 18L16 26L17.5 18"
         stroke="#D97706"
-        strokeWidth="2"
+        strokeWidth="3"
         strokeLinecap="round"
       />
     </svg>

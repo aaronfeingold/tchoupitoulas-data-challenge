@@ -35,8 +35,8 @@ export const ProfileDisplay = React.memo(function ProfileDisplay({
         <CardHeader>
           <CardTitle className="flex items-center">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-mint to-pink p-2 flex items-center justify-center">
-                <Avatar size={48} />
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-mint to-pink p-2 flex items-center justify-center">
+                <Avatar size={64} />
               </div>
               <div>
                 <h3 className="text-xl font-bold">
