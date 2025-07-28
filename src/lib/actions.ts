@@ -561,7 +561,7 @@ export async function toggleEmailNotifications(enabled: boolean) {
       return { success: false, error: "Not authenticated" };
     }
 
-    const userId = parseInt(session.user.id as string);
+    const userId = session.user.id as string;
 
     await db
       .update(users)
@@ -588,7 +588,7 @@ export async function exportUserData() {
       return { success: false, error: "Not authenticated" };
     }
 
-    const userId = parseInt(session.user.id as string);
+    const userId = session.user.id as string;
 
     // Get user profile data
     const userResult = await getUserProfile(userId);
@@ -621,7 +621,7 @@ export async function deleteUserAccount() {
       return { success: false, error: "Not authenticated" };
     }
 
-    const userId = parseInt(session.user.id as string);
+    const userId = session.user.id as string;
 
     // Delete user record (CASCADE will handle related records)
     await db.delete(users).where(eq(users.id, userId));
