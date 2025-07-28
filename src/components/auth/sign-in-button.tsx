@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Github, Chrome, LogIn, Mail, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import {
   Tooltip,
   TooltipContent,
@@ -143,6 +144,8 @@ export function EmailSignInForm() {
         setEmail("");
       }
     } catch (error) {
+      console.error("Failed to send magic link:", error);
+      toast.error("Something went wrong. Please try again.");
       setMessage({
         type: "error",
         text: "Something went wrong. Please try again.",

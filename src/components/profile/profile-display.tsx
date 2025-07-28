@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getAvatarComponent } from "@/components/avatars/ice-cream-avatars";
 import { Mail, MapPin, IceCream } from "lucide-react";
-import { User } from "@/lib/schema";
+import { User } from "@/db";
 
 interface ProfileDisplayProps {
   profileData?: User | null;

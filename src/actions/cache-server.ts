@@ -1,3 +1,7 @@
+"use server";
+
+import { revalidateTag } from "next/cache";
+
 // Cache tags for different types of data
 export const CACHE_TAGS = {
   ALL_ENTRIES: "all-entries",
@@ -9,8 +13,9 @@ export const CACHE_TAGS = {
   USER_PROFILE: "user-profile",
 } as const;
 
-// Cache duration in seconds (24 hours)
-export const CACHE_DURATION = 24 * 60 * 60;
-
-// Re-export server action from separate file
-export { revalidateAllCaches } from "./cache-server";
+// Utility function to revalidate all caches when data changes
+export async function revalidateAllCaches() {
+  Object.values(CACHE_TAGS).forEach((tag) => {
+    revalidateTag(tag);
+  });
+}

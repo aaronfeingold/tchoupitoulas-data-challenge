@@ -1,10 +1,13 @@
-import { Session, AdapterUser } from "next-auth";
+import { AdapterUser } from "next-auth";
 import "next-auth";
 import { Account as AccountType } from "next-auth/providers/oauth";
 declare module "next-auth" {
-  interface Session extends Session {
+  interface Session {
     user: {
       id: string;
+      name?: string | null;
+      email: string;
+      image?: string | null;
     };
   }
   interface User extends AdapterUser {
@@ -14,7 +17,9 @@ declare module "next-auth" {
     image?: string | null;
   }
 
-  interface Account extends AccountType {}
+  interface Account extends AccountType {
+    access_token?: string;
+  }
 }
 
 declare module "next-auth/jwt" {

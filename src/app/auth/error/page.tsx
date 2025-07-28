@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import {
   Card,
@@ -20,7 +20,7 @@ const errorMessages = {
   Default: "An error occurred during the authentication process.",
 };
 
-export default function AuthErrorPage() {
+function AuthErrorContent() {
   const [isVisible, setIsVisible] = useState(false);
   const searchParams = useSearchParams();
   const error = searchParams.get("error") as keyof typeof errorMessages;
@@ -103,5 +103,13 @@ export default function AuthErrorPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AuthErrorPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthErrorContent />
+    </Suspense>
   );
 }
