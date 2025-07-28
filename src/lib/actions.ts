@@ -466,7 +466,7 @@ export async function updateUserProfile(formData: FormData) {
       return { success: false, error: "Not authenticated" };
     }
 
-    const userId = parseInt(session.user.id as string);
+    const { id: userId } = session.user;
 
     const updateData: UpdateProfileData = {
       name: (formData.get("name") as string) || undefined,
@@ -490,15 +490,26 @@ export async function updateUserProfile(formData: FormData) {
       return { success: false, error: "No data to update" };
     }
 
-    await db
-      .update(users)
-      .set({
-        ...cleanedData,
-        updatedAt: new Date(),
-      })
-      .where(eq(users.id, userId));
+    try {
+      const result = await db
+        .update(users)
+        .set({
+          ...cleanedData,
+          updatedAt: new Date(),
+        })
+        .where(eq(users.id, userId));
 
-    console.log("updateUserProfile", cleanedData);
+      // Check if any rows were actually updated
+      if (result.rowCount === 0) {
+        console.error("No user found with ID:", userId);
+        return { success: false, error: "User not found" };
+      }
+
+      console.log("updateUserProfile", cleanedData);
+    } catch (dbError) {
+      console.error("Database error in updateUserProfile:", dbError);
+      return { success: false, error: "Failed to update profile in database" };
+    }
 
     // Revalidate user profile cache
     revalidateTag(CACHE_TAGS.USER_PROFILE);
@@ -511,7 +522,7 @@ export async function updateUserProfile(formData: FormData) {
 }
 
 const getUserProfileCached = unstable_cache(
-  async (userId: number) => {
+  async (userId: string) => {
     try {
       const user = await db
         .select()
@@ -536,12 +547,10 @@ const getUserProfileCached = unstable_cache(
   }
 );
 
-export async function getUserProfile(userId?: number) {
+export async function getUserProfile(userId?: string) {
   try {
     const session = await getServerSession(authOptions);
-    const targetUserId =
-      userId ||
-      (session?.user?.id ? parseInt(session.user.id as string) : null);
+    const targetUserId = userId || (session?.user?.id as string);
 
     if (!targetUserId) {
       return { success: false, error: "User ID not found" };
@@ -563,13 +572,27 @@ export async function toggleEmailNotifications(enabled: boolean) {
 
     const userId = session.user.id as string;
 
-    await db
-      .update(users)
-      .set({
-        emailNotificationsEnabled: enabled,
-        updatedAt: new Date(),
-      })
-      .where(eq(users.id, userId));
+    try {
+      const result = await db
+        .update(users)
+        .set({
+          emailNotificationsEnabled: enabled,
+          updatedAt: new Date(),
+        })
+        .where(eq(users.id, userId));
+
+      // Check if any rows were actually updated
+      if (result.rowCount === 0) {
+        console.error("No user found with ID:", userId);
+        return { success: false, error: "User not found" };
+      }
+    } catch (dbError) {
+      console.error("Database error in toggleEmailNotifications:", dbError);
+      return {
+        success: false,
+        error: "Failed to update notification settings in database",
+      };
+    }
 
     // Revalidate user profile cache
     revalidateTag(CACHE_TAGS.USER_PROFILE);
@@ -588,7 +611,7 @@ export async function exportUserData() {
       return { success: false, error: "Not authenticated" };
     }
 
-    const userId = session.user.id as string;
+    const { id: userId } = session.user;
 
     // Get user profile data
     const userResult = await getUserProfile(userId);
