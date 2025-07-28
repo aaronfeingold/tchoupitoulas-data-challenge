@@ -11,7 +11,7 @@
     "lint": "next lint",
     "db:generate": "dotenv -e .env.local -- drizzle-kit generate",
     "db:push": "dotenv -e .env.local -- drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
+    "db:studio": "dotenv -e .env.local -- drizzle-kit studio",
     "setup:env": "cp env.example .env.local && echo 'Created .env.local from env.example. Please update with your OAuth credentials.'",
     "setup:secret": "node -e \"console.log('Add this to .env.local as NEXTAUTH_SECRET='); console.log(require('crypto').randomBytes(32).toString('base64'))\""
   },
@@ -52,6 +52,7 @@
     "@types/pg": "^8.15.4",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv-cli": "^9.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "prettier": "^3.6.2",
