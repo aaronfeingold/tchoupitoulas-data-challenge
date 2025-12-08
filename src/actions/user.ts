@@ -72,7 +72,7 @@ export async function updateUserProfile(formData: FormData) {
     }
 
     // Revalidate user profile cache
-    revalidateTag(CACHE_TAGS.USER_PROFILE);
+    revalidateTag(CACHE_TAGS.USER_PROFILE, "max");
 
     return { success: true };
   } catch (error) {
@@ -155,7 +155,7 @@ export async function toggleEmailNotifications(enabled: boolean) {
     }
 
     // Revalidate user profile cache
-    revalidateTag(CACHE_TAGS.USER_PROFILE);
+    revalidateTag(CACHE_TAGS.USER_PROFILE, "max");
 
     return { success: true, data: { enabled } };
   } catch (error) {
@@ -210,7 +210,7 @@ export async function deleteUserAccount() {
     await db.delete(users).where(eq(users.id, userId));
 
     // Revalidate caches
-    revalidateTag(CACHE_TAGS.USER_PROFILE);
+    revalidateTag(CACHE_TAGS.USER_PROFILE, "max");
 
     return { success: true };
   } catch (error) {
